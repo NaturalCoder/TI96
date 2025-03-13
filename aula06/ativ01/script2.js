@@ -72,11 +72,16 @@ function renderizarTarefas(novaAdicao = false) {
 }
 
 function formatarTempo(milissegundos) {
-    if(milissegundos <= 0) return 'Tempo Esgotado!';
-    const segundos = Math.floor(milissegundos / 1000);
-    const minutos = Math.floor(segundos / 60);
-    const segundosRestantes = segundos % 60;
-    return `${minutos.toString().padStart(2, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
+    if(milissegundos <= 0) //tempo esgotado
+    { 
+        return 'Tempo Esgotado!';
+    }
+    else { //tempo não esgotado
+        const segundos = Math.floor(milissegundos / 1000);
+        const minutos = Math.floor(segundos / 60);
+        const segundosRestantes = segundos % 60;
+        return `${minutos.toString().padStart(2, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
+    }
 }
 
 function exibirAlerta(mensagem) {
