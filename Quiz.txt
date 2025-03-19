@@ -1,0 +1,7 @@
+Quiz
+
+O que é um controle de versão
+Qual a diferenã entre Git e GitHub
+Diferença entre Live-server, Python, e clickduplo
+Analisar trecho aula-anterior
+
