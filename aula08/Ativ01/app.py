@@ -14,9 +14,9 @@ class Aluno(db.Model):
     # Nomes das colunas em português para facilitar o entendimento
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    idade = db.Column(db.Integer, nullable=False)
-    pontos = db.Column(db.Integer, nullable=False, default=0)
+    email = db.Column(db.String(100), unique=True, nullable=True)
+    idade = db.Column(db.Integer, nullable=True)
+    pontos = db.Column(db.Integer, nullable=True, default=0)
 
     def __repr__(self):
         return f'<Aluno {self.nome}>'
@@ -42,8 +42,8 @@ def cadastrar_aluno():
         novo_aluno = Aluno(
             nome=request.form['nome'],
             email=request.form['email'],
-            idade=int(request.form['idade']),
-            pontos=int(request.form['pontos'])
+            idade=(request.form['idade']),
+            pontos=(request.form['pontos'])
         )
         
         try:
@@ -64,8 +64,8 @@ def editar_aluno(id):
         # Atualiza os dados do aluno
         aluno.nome = request.form['nome']
         aluno.email = request.form['email']
-        aluno.idade = int(request.form['idade'])
-        aluno.pontos = int(request.form['pontos'])
+        aluno.idade = (request.form['idade'])
+        aluno.pontos = (request.form['pontos'])
         
         try:
             db.session.commit()

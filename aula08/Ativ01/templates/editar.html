@@ -1,4 +1,12 @@
-<!-- templates/cadastrar.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar aluno</title>
+</head>
+<body>
+    <!-- templates/cadastrar.html -->
 {% extends "base.html" %}
  
 {% block content %}
@@ -6,21 +14,23 @@
     <form method="POST">
         <div class="mb-3">
             <label class="form-label">Nome</label>
-            <input type="text" class="form-control" name="nome" required>
+            <input type="text" class="form-control" name="nome" value="{{ aluno.nome }}">
         </div>
         <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email">
+            <input type="email" class="form-control" name="email" value="{{ aluno.email }}">
         </div>
         <div class="mb-3">
             <label class="form-label">Idade</label>
-            <input type="number" class="form-control" name="idade">
+            <input type="number" class="form-control" name="idade" value="{{ aluno.idade }}">
         </div>
         <div class="mb-3">
             <label class="form-label">Pontos</label>
-            <input type="number" class="form-control" name="pontos">
+            <input type="number" class="form-control" name="pontos" value="{{ aluno.pontos }}">
         </div>
         <button type="submit" class="btn btn-success">Salvar</button>
         <a href="{{ url_for('listar_alunos') }}" class="btn btn-secondary">Cancelar</a>
     </form>
 {% endblock %}
+</body>
+</html>
