@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 class Aluno(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=True)
+    email = db.Column(db.String(100), nullable=True)
     idade = db.Column(db.Integer, nullable=True)
     pontos = db.Column(db.Integer, nullable=False, default=0)
 
@@ -101,7 +101,7 @@ def editar_aluno(id):
         aluno.nome = request.form['nome']
         aluno.email = request.form['email']
         aluno.idade = request.form['idade']
-        #@aluno.pontos = int(request.form['pontos'])
+        aluno.pontos = int(request.form['pontos'])
         
         try:
             db.session.commit()
