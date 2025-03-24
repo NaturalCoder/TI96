@@ -36,14 +36,14 @@ def listar_alunos():
 
 # Rota para cadastro de novos alunos
 @app.route('/cadastrar', methods=['GET', 'POST'])
-def cadastrar_aluno():
+def cadastrar_aluno():    
     if request.method == 'POST':
         # Coleta dados do formulário
         novo_aluno = Aluno(
             nome=request.form['nome'],
             email=request.form['email'],
-            idade=(request.form['idade']),
-            pontos=(request.form['pontos'])
+            idade=request.form['idade'],
+            pontos=request.form['pontos']
         )
         
         try:
@@ -64,8 +64,8 @@ def editar_aluno(id):
         # Atualiza os dados do aluno
         aluno.nome = request.form['nome']
         aluno.email = request.form['email']
-        aluno.idade = (request.form['idade'])
-        aluno.pontos = (request.form['pontos'])
+        aluno.idade = request.form['idade']
+        aluno.pontos = request.form['pontos']
         
         try:
             db.session.commit()
