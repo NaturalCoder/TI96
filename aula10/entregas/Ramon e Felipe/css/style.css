@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff; /* Cor de fundo padrão */
+    
+    /* Adiciona uma imagem de fundo */
+    background-image: url('/img/imgs.webp'); /* Substitua pelo caminho da imagem */
+    background-size: cover;  /* Faz a imagem cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-attachment: fixed; /* Mantém a imagem fixa ao rolar a página */
+}
+    h1, p, input, button, img {
+        background-color: rgba(31, 216, 40, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        display: inline-block;
+        font-size: 40px;
+    }
+
+/* Adiciona um fundo semi-transparente para melhorar a leitura */
+
+input[type="file"] {
+    margin: 20px 0;
+}
+canvas {
+    display: none;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+button {
+    padding: 10px 20px;
+    background-color: #0400f5;
+    border: none;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+button:hover {
+    background-color: #f3ef08;
+}

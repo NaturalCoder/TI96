@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Figurinhas WhatsApp</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+ 
+    <h1>Conversor de Figurinhas para WhatsApp</h1>
+    <br>
+    <p>Carregue uma imagem e converta em figurinha para o WhatsApp</p>
+    <br>
+ 
+    <input type="file" id="fileInput" accept="image/*">
+    <br>
+    <canvas id="canvas"></canvas>
+    <br>
+    <img id="preview" src="" alt="Imagem carregada">
+    <br>
+    <button id="downloadBtn" style="display:none;">Baixar Figurinha</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-to-blob@2.0.0/canvas-to-blob.min.js"></script>
+    <script src="script.js"></script>
+ 
+</body>
+</html>
