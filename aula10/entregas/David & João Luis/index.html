@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <h1 style="margin-bottom: 20px;">Lista de Tarefas</h1>
+        <div class="input-container" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+            <input type="text" id="novaTarefa" placeholder="Digite uma nova tarefa" style="flex: 1; padding: 10px;">
+            <input type="datetime-local" id="dataFinal" style="flex: 1; padding: 10px; letter-spacing: 1px;">
+            <button id="adicionarTarefaBtn" style="padding: 10px 20px;">Adicionar Tarefa</button>
+        </div>
+        <div class="contador" style="margin-bottom: 20px;">
+            <p style="font-size: 16px;">Total de tarefas: <span id="contadorTarefas">0</span></p>
+        </div>
+        <div class="tarefas" id="listaTarefas" style="text-align: left;">
+            <!-- Exemplo funcional de tarefa com ícone -->
+            <div class="tarefa" style="display: flex; align-items: center; margin-bottom: 10px;">
+                <span style="flex: 1;">1. Exemplo de tarefa</span>
+                <img src="./assets/icone.png" alt="Ícone da tarefa" class="icone-tarefa" style="width: 20px; height: 20px; margin-left: 10px;">
+            </div>
+        </div>
+        <!-- Adicionando container para notificações -->
+        <div id="notificacao" class="notificacao" style="display: none; margin-top: 20px;">
+            <p style="margin-bottom: 10px;">Deseja remarcar esta tarefa?</p>
+            <button id="remarcarSim" style="margin-right: 10px;">Sim</button>
+            <button id="remarcarNao">Não</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Atualizar o script para corrigir a exibição dos números
+        const listaTarefas = document.getElementById('listaTarefas');
+        const contadorTarefas = document.getElementById('contadorTarefas');
+        const adicionarTarefaBtn = document.getElementById('adicionarTarefaBtn');
+        const novaTarefaInput = document.getElementById('novaTarefa');
+        const notificacao = document.getElementById('notificacao');
+        const remarcarSim = document.getElementById('remarcarSim');
+        const remarcarNao = document.getElementById('remarcarNao');
+        const dataFinalInput = document.getElementById('dataFinal');
+
+        adicionarTarefaBtn.addEventListener('click', () => {
+            const novaTarefa = novaTarefaInput.value.trim();
+            const dataFinal = dataFinalInput.value;
+
+            if (novaTarefa) {
+                const tarefaCount = listaTarefas.children.length + 1; // Contar tarefas
+                const tarefaDiv = document.createElement('div');
+                tarefaDiv.className = 'tarefa';
+                tarefaDiv.style.display = 'flex';
+                tarefaDiv.style.alignItems = 'center';
+                tarefaDiv.style.marginBottom = '10px';
+                tarefaDiv.innerHTML = `
+                    <span style="flex: 1;">${tarefaCount}. ${novaTarefa} ${dataFinal ? `(Até: ${new Date(dataFinal).toLocaleString('pt-BR')})` : ''}</span>
+                    <button class="concluidaBtn" style="margin-left: 10px;">Concluída</button>
+                    <button class="naoConcluidaBtn" style="margin-left: 10px;">Não concluída</button>
+                `;
+                listaTarefas.appendChild(tarefaDiv);
+                contadorTarefas.textContent = tarefaCount; // Atualizar contador
+                novaTarefaInput.value = ''; // Limpar input
+                dataFinalInput.value = ''; // Limpar data final
+
+                // Adicionar evento ao botão "Concluída"
+                const concluidaBtn = tarefaDiv.querySelector('.concluidaBtn');
+                concluidaBtn.addEventListener('click', () => {
+                    alert('Parabéns por concluir a tarefa!');
+                });
+
+                // Adicionar evento ao botão "Não concluída"
+                const naoConcluidaBtn = tarefaDiv.querySelector('.naoConcluidaBtn');
+                naoConcluidaBtn.addEventListener('click', () => {
+                    notificacao.style.display = 'block';
+                });
+            } else {
+                alert('Por favor, insira uma tarefa antes de adicionar.');
+            }
+        });
+
+        remarcarSim.addEventListener('click', () => {
+            notificacao.style.display = 'none';
+            alert('Tarefa remarcada!');
+        });
+
+        remarcarNao.addEventListener('click', () => {
+            notificacao.style.display = 'none';
+            alert('Tarefa não remarcada!');
+        });
+    </script>
+</body>
+</html>
