@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciador de Tarefas</title>
+    <style>
+        :root {
+            background-color: red;
+            --primaria: #2c3e50;
+            --sucesso: #27ae60;
+            --alerta: #f1c40f;
+            --perigo: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background:red
+        }
+
+        .formulario-tarefa {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.1);
+        }
+
+        .formulario-tarefa input,
+        .formulario-tarefa textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .formulario-tarefa button {
+            background: var(--primaria);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .lista-tarefas {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .cartao-tarefa {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            box-shadow: 0 0.3rem 0.6rem rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cartao-tarefa.nova {
+            animation: surgir 0.4s ease forwards;
+        }
+
+        .cartao-tarefa.expirada {
+            animation: pulsarAlerta 1.5s infinite;
+            border-left: 0.4rem solid var(--perigo);
+        }
+
+        .barra-progresso {
+            height: 0.6rem;
+            background: #eee;
+            border-radius: 0.3rem;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .progresso {
+            height: 100%;
+            background: var(--sucesso);
+            transition: width 0.5s ease, background 0.3s ease;
+        }
+
+        .contador-tempo {
+            font-size: 0.9em;
+            color: #666;
+            font-variant-numeric: tabular-nums;
+        }
+
+        @keyframes surgir {
+            from {
+                opacity: 0;
+                transform: translateY(1rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulsarAlerta {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.2); }
+            70% { box-shadow: 0 0 0 1rem rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        .alerta {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            background: var(--perigo);
+            color: white;
+            border-radius: 0.5rem;
+            animation: surgir 0.3s ease;
+        }
+
+      
+    </style>
+</head>
+<body>
+    <div class="formulario-tarefa">
+        <h2>Nova Tarefa</h2>
+        <input type="text" id="nomeTarefa" placeholder="Nome da tarefa" required>
+        <textarea id="descricaoTarefa" placeholder="Descrição detalhada"></textarea>
+        <input type="number" id="duracaoTarefa" placeholder="Duração (minutos)" min="1" required>
+        <button onclick="adicionarTarefa()">➕ Adicionar Tarefa</button>
+    </div>
+
+    <div class="lista-tarefas" id="listaTarefas"></div>
+
+    <script src="script.js"></script>
+    <script src="script2.js"></script>
+
+    <script>function adicionarTarefa() {
+        const nomeInput = document.getElementById('nomeTarefa');
+        const duracaoInput = document.getElementById('duracaoTarefa');
+        
+        if (!nomeInput.value || !duracaoInput.value) {
+            alert('Preencha os campos obrigatórios!');
+            return;
+        }
+    
+        const novaTarefa = {
+            id: Date.now(),
+            nome: nomeInput.value,
+            descricao: document.getElementById('descricaoTarefa').value,
+            duracao: parseInt(duracaoInput.value) * 60,
+            dataCriacao: Date.now(),
+            dataLimite: null,
+            progresso: 0,
+            expirada: false
+        };
+    
+        novaTarefa.dataLimite = novaTarefa.dataCriacao + (novaTarefa.duracao * 1000);
+        tarefas.push(novaTarefa);
+        
+        nomeInput.value = '';
+        document.getElementById('descricaoTarefa').value = '';
+        duracaoInput.value = '';
+        
+        salvarLocalStorage();
+        renderizarTarefas(true);
+    }
+    
+    function atualizarTempo() {
+        const agora = Date.now();
+        
+        tarefas.forEach(tarefa => {
+            const tempoRestante = tarefa.dataLimite - agora;
+            tarefa.progresso = ((agora - tarefa.dataCriacao) / (tarefa.dataLimite - tarefa.dataCriacao)) * 100;
+            
+            if (tempoRestante <= 0 && !tarefa.expirada) {
+                tarefa.expirada = true;
+                exibirAlerta(`⏰ Tempo esgotado: ${tarefa.nome}`);
+            }
+        });
+        
+        renderizarTarefas();
+    }
+    
+    function renderizarTarefas(novaAdicao = false) {
+        const container = document.getElementById('listaTarefas');
+        container.innerHTML = '';
+        
+        tarefas.forEach(tarefa => {
+            const elemento = document.createElement('div');
+            elemento.id = `tarefa-${tarefa.id}`;
+            elemento.className = `cartao-tarefa${novaAdicao ? ' nova' : ''}`;
+            elemento.innerHTML = `
+                <h3>${tarefa.nome}</h3>
+                ${tarefa.descricao ? `<p>${tarefa.descricao}</p>` : ''}
+                <div class="barra-progresso">
+                    <div class="progresso" style="width: ${Math.min(tarefa.progresso, 100)}%"></div>
+                </div>
+                <div class="contador-tempo">${formatarTempo(tarefa.dataLimite - Date.now())}</div>
+                <button onclick="removerTarefa(${tarefa.id})">🗑️ Remover</button>
+            `;
+            
+            if (tarefa.expirada) {
+                elemento.classList.add('expirada');
+            }
+            
+            container.appendChild(elemento);
+        });
+    }
+    
+    function formatarTempo(milissegundos) {
+        if(milissegundos <= 0) //tempo esgotado
+        { 
+            return 'Tempo Esgotado!';
+        }
+        else { //tempo não esgotado
+            const segundos = Math.floor(milissegundos / 1000);
+            const minutos = Math.floor(segundos / 60);
+            const segundosRestantes = segundos % 60;
+            return `${minutos.toString().padStart(2, '0')}:${segundosRestantes.toString().padStart(2, '0')}`;
+        }
+    }
+    
+    function exibirAlerta(mensagem) {
+        const alerta = document.createElement('div');
+        alerta.className = 'alerta';
+        alerta.textContent = mensagem;
+        document.body.appendChild(alerta);
+        
+        setTimeout(() => {
+            alerta.remove();
+        }, 3000);
+    }
+    
+    function removerTarefa(id) {
+        const elemento = document.getElementById(`tarefa-${id}`);
+        if(elemento) {
+            elemento.style.opacity = '0';
+            elemento.style.transform = 'translateY(-1rem)';
+            setTimeout(() => elemento.remove(), 300);
+        }
+        tarefas = tarefas.filter(tarefa => tarefa.id !== id);
+        salvarLocalStorage();
+    }
+    
+    function salvarLocalStorage() {
+        localStorage.setItem('tatefas', JSON.stringify(tarefas));
+    }
+    
+    setInterval(atualizarTempo, 1000);
+    renderizarTarefas();</script>
+    
+    <script>
+    var tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+
+    </script>
+</body>
+</html>
