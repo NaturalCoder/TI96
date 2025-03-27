@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <div class="form-container">
+      <h2>Entrar</h2>
+      <input id="email" type="email" placeholder="Email" required>
+      <input id="senha" type="password" placeholder="Senha" required>
+      <button onclick="login()">ENTRAR</button>
+      <p id="mensagemErro" style="color: red;"></p>
+    </div>
+
+    <div class="info-container">
+      <h2>Olá, amigo!</h2>
+      <p>Registre-se para usar todos os recursos</p>
+      <form action="/cadastro" method="get">
+        <button type="submit">INSCREVER</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    async function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('senha').value;
+
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem("userId", data.userId);
+        alert("✅ Login realizado com sucesso!");
+        window.location.href = "/dashboard";
+      } else {
+        document.getElementById("mensagemErro").innerText = data.message;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <div class="form-container">
+      <h2>Cadastro</h2>
+      <input id="email" type="email" placeholder="Seu e-mail">
+      <input id="senha" type="password" placeholder="Sua senha">
+      <button onclick="registrar()">REGISTRAR</button>
+      <p id="mensagemErro" style="color: red;"></p>
+      <p style="margin-top: 10px;"><a href="/">Já tenho conta</a></p>
+    </div>
+    <div class="info-container">
+      <h2>Bem-vindo!</h2>
+      <p>Cadastre-se para começar a salvar suas senhas</p>
+    </div>
+  </div>
+
+  <script>
+    async function registrar() {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('senha').value
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.message);
+        window.location.href = "/";
+      } else {
+        document.getElementById("mensagemErro").innerText = data.message;
+      }
+    }
+  </script>
+</body>
+</html>

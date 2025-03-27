@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="menu-container">
+      <h2>Gerenciador de Senhas</h2>
+      <p>Escolha o que deseja fazer:</p>
+      <button onclick="mostrarSecao('anotacoes')" class="botao-acao"><span>📝</span> Anotações</button>
+      <button onclick="mostrarSecao('cadastro')" class="botao-acao"><span>🔐</span> Cadastrar Senha</button>
+      <button onclick="mostrarSecao('categorias')" class="botao-acao"><span>📁</span> Categorias</button>
+      <button onclick="mostrarSecao('relatorio')" class="botao-acao"><span>📊</span> Relatório</button>
+      <button onclick="mostrarSecao('cadastradas')" class="botao-acao"><span>🔎</span> Senhas Cadastradas</button>
+      <button onclick="logout()" class="botao-acao"><span>📲</span> Sair</button>
+    </div>
+
+  <!-- Anotações -->
+  <div id="secao-anotacoes" class="secao oculto">
+    <h3>📝 Anotações</h3>
+    <p>Este aplicativo tem como objetivo ajudar você a gerenciar suas senhas de forma segura e prática. Abaixo estão as funcionalidades principais:</p>
+    <ul style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+      <li><strong>🔐 Cadastrar Senha:</strong> Registre um novo serviço, informando o nome do site, usuário/email, senha e tipo de serviço.</li>
+      <li><strong>📁 Categorias:</strong> Filtre rapidamente as senhas cadastradas por categoria.</li>
+      <li><strong>📊 Relatório:</strong> Visualize um resumo com status e dias desde o cadastro.</li>
+      <li><strong>🔎 Senhas Cadastradas:</strong> Exibe todas as senhas com opção de mostrar/ocultar e copiar.</li>
+      <li><strong>📝 Anotações:</strong> Espaço livre para lembretes ou observações importantes.</li>
+    </ul>
+    <textarea id="blocoAnotacoes" rows="6" style="width:100%; margin-bottom: 15px;" placeholder="Você também pode usar este espaço para anotar observações pessoais..."></textarea>
+    <button onclick="salvarAnotacoes()">Salvar</button>
+  </div>
+
+     <div id="secao-cadastro" class="secao oculto">
+      <h3>🔐 Cadastrar Senha de Segurança</h3>
+      <form onsubmit="cadastrarSenha(event)">
+        <input type="text" id="novoSite" placeholder="Site ou Serviço" required><br><br>
+        <input type="text" id="novoUsuario" placeholder="Usuário" required><br><br>
+        <input type="email" id="novoEmail" placeholder="Email" required><br><br>
+        <input type="text" id="novoNick" placeholder="Nick ou Apelido"><br><br>
+        <input type="password" id="novaSenha" placeholder="Senha (mínimo 12 caracteres)" required><br><br>
+        <select id="tipoSenha" required>
+          <option value="">Selecione o tipo</option>
+          <option value="site">🌐 Site</option>
+          <option value="rede social">📱 Rede Social</option>
+          <option value="email">✉️ E-mail</option>
+          <option value="outros">📂 Outros</option>
+        </select><br><br>
+        <button type="submit">Salvar Senha</button>
+      </form>
+    </div>
+
+
+
+
+     <div id="secao-categorias" class="secao oculto">
+       <h3>📁 Categorias</h3>
+       <button onclick="filtrar('site')">🌐 Site</button>
+       <button onclick="filtrar('rede social')">📱 Redes Sociais</button>
+       <button onclick="filtrar('email')">✉️ E-mails</button>
+       <button onclick="filtrar('outros')">📂 Outros</button>
+       <button onclick="filtrarTodos()">🔄 Mostrar Todas</button>
+     </div>
+
+     <div id="secao-relatorio" class="secao oculto">
+       <h3>📊 Relatório</h3>
+       <table class="tabela-relatorio">
+         <thead>
+           <tr>
+             <th>Tipo</th><th>Site</th><th>Usuário</th><th>Email</th><th>Data</th><th>Dias</th><th>Status</th>
+           </tr>
+         </thead>
+         <tbody id="tabelaRelatorio"></tbody>
+       </table>
+     </div>
+
+     <div id="secao-cadastradas" class="secao oculto">
+       <h3>🔒 Senhas Cadastradas</h3>
+       <ul id="listaSenhas"></ul>
+     </div>
+
+     <div id="secao-lixeira" class="secao oculto">
+       <h3>🗑 Senhas na Lixeira</h3>
+       <ul id="listaLixeira"></ul>
+     </div>
+   </div>
+ </div>
+
+ <script>
+   const userId = localStorage.getItem("userId");
+
+   if (!userId) {
+     alert("Você precisa estar logado.");
+     window.location.href = "/"; // Redireciona para a página de login
+   }
+
+   window.onload = async function () {
+     carregarAnotacoes();
+
+     try {
+       const res = await fetch(`/api/passwords/${userId}`);
+       const senhas = await res.json();
+       carregarLista(senhas);
+       gerarRelatorio(senhas);
+     } catch (e) {
+       console.error("Erro ao carregar senhas:", e);
+     }
+   };
+
+   async function cadastrarSenha(event) {
+     event.preventDefault();
+
+     const site = document.getElementById("novoSite").value;
+     const username = document.getElementById("novoUsuario").value;
+     const email = document.getElementById("novoEmail").value;
+     const nick = document.getElementById("novoNick").value;
+     const password = document.getElementById("novaSenha").value;
+     const tipo = document.getElementById("tipoSenha").value;
+
+     const dados = {
+       user_id: userId,
+       site,
+       username,
+       email,
+       nick,
+       password,
+       tipo
+     };
+
+     try {
+       const res = await fetch("/api/passwords", {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify(dados)
+       });
+
+       const resultado = await res.json();
+       alert(resultado.message);
+
+       const novaResposta = await fetch(`/api/passwords/${userId}`);
+       const senhas = await novaResposta.json();
+       carregarLista(senhas);
+       gerarRelatorio(senhas);
+
+       event.target.reset();
+     } catch (error) {
+       console.error("Erro ao cadastrar senha:", error);
+       alert("Ocorreu um erro ao salvar a senha.");
+     }
+   }
+
+   function mostrarSecao(secao) {
+     document.querySelectorAll(".secao").forEach(div => div.classList.add("oculto"));
+     const alvo = document.getElementById("secao-" + secao);
+     if (alvo) alvo.classList.remove("oculto");
+   }
+
+   function filtrar(tipo) {
+     const senhasFiltradas = senhasGlobais.filter(s => s.tipo === tipo);
+     carregarLista(senhasFiltradas);
+   }
+
+   function filtrarTodos() {
+     carregarLista(senhasGlobais);
+   }
+
+   function gerarRelatorio(senhas) {
+     const tbody = document.getElementById("tabelaRelatorio");
+     tbody.innerHTML = "";
+
+     senhas.forEach(s => {
+       const tr = document.createElement("tr");
+       tr.innerHTML = `
+         <td>${s.tipo || ''}</td>
+         <td>${s.site || ''}</td>
+         <td>${s.username || ''}</td>
+         <td>${s.email || ''}</td>
+         <td>${s.data || '-'}</td>
+         <td>${s.dias != null ? s.dias : '-'}</td>
+         <td><span class="${s.trocar ? 'vermelho' : 'verde'}">${s.trocar ? 'Trocar' : 'Ok'}</span></td>
+       `;
+       tbody.appendChild(tr);
+     });
+   }
+
+   function carregarLista(senhas) {
+     const corpo = document.getElementById("listaSenhas");
+     corpo.innerHTML = "";
+     senhas.forEach(s => {
+       const li = document.createElement("li");
+       li.innerHTML = `
+         <strong>${s.site}</strong> - ${s.username}<br>
+         Senha: <span class="senha" data-original="${s.password}">••••••••</span>
+         <button onclick="mostrarSenha(this)">👁</button>
+         <button onclick="copiarSenha(this)">📋</button>
+         <button onclick="deletarSenha(${s.id})">🗑</button>
+       `;
+       corpo.appendChild(li);
+     });
+   }
+
+   async function deletarSenha(id) {
+     if (!confirm("Deseja mover esta senha para a lixeira?")) return;
+     const res = await fetch(`/api/passwords/${id}`, { method: "DELETE" });
+     const data = await res.json();
+     alert(data.message);
+     location.reload();
+   }
+
+   async function restaurarSenha(id) {
+     const res = await fetch(`/api/lixeira/restaurar/${id}`, { method: "PUT" });
+     const data = await res.json();
+     alert(data.message);
+     carregarLixeira();
+   }
+
+   async function carregarLixeira() {
+     const res = await fetch(`/api/lixeira/${userId}`);
+     const senhas = await res.json();
+     const ul = document.getElementById("listaLixeira");
+     ul.innerHTML = "";
+
+     senhas.forEach(s => {
+       const li = document.createElement("li");
+       li.innerHTML = `
+         <strong>${s.site}</strong> - ${s.username}<br>
+         Senha: <span class="senha" data-original="${s.password}">••••••••</span>
+         <button onclick="mostrarSenha(this)">👁</button>
+         <button onclick="copiarSenha(this)">📋</button>
+         <button onclick="restaurarSenha(${s.id})">♻️ Restaurar</button>
+       `;
+       ul.appendChild(li);
+     });
+   }
+
+   function salvarAnotacoes() {
+     const texto = document.getElementById("blocoAnotacoes").value;
+     localStorage.setItem("anotacoes", texto);
+     alert("Anotações salvas!");
+   }
+
+   function logout() {
+     localStorage.removeItem("userId");
+     window.location.href = "/";
+   }
+ </script>
+</body>
+</html>
