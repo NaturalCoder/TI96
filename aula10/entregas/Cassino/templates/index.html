@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquina Caça-Níqueis </title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <img src="/static/images/seupaiouso.jpeg" alt="seupai" class="seupailogo">
+    <div class="marquee">
+        <p id="marquee-text">🎰💵 Bem-vindo {{user}} ao Cassino! 🎲💲 Tente sua sorte e ganhe prêmios incríveis! 💰💎 Continue vamos vamos a insistencia leva a fortuna 🤑💸</p>
+    </div>
+
+    <div id="setup-screen" class="setup-screen">
+        <h2>Escolha seu modo de jogo</h2>
+        <input type="number" id="valorInicial" placeholder="Digite um valor">
+        <button onclick="setDinheiro()">Adicionar Dinheiro</button>
+        <button onclick="modoTeste()">Modo Teste (Dinheiro Infinito)</button>
+    </div>
+
+    <div id="game-screen" class="hidden">
+        <h1>🎰 Cassino Slot Machine 🎰</h1>
+        <p>Saldo: R$<span id="saldo">0</span></p>
+        <div class="slots">
+            <div class="slot" id="slot1">❓</div>
+            <div class="slot" id="slot2">❓</div>
+            <div class="slot" id="slot3">❓</div>
+        </div>
+        <button onclick="spinReels()">🎲 Girar 🎲</button>
+        <p id="message"></p>
+
+        <button id="add-money-btn">Adicionar Dinheiro</button>
+
+        <div id="popup-add-money" class="hidden">
+        <h2>Adicionar Dinheiro</h2>
+        <input type="number" id="valornovo" placeholder="Digite o valor">
+        <button id="confirm-add-money">Confirmar</button>
+        <button id="close-popup">Fechar</button>
+        </div>
+        
+        
+    
+
+    <button onclick="abrirPopup()" class="suporte">🗣️</button>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="fecharPopup()">&times;</span>
+            <p>Clique no link abaixo para entrar nosso Discord:</p>
+            <a href="https://discord.gg/4fBJQbhJhW" target="_blank">Acessar Suporte</a>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
