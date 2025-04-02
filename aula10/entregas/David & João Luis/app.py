@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 CORS(app)
 
-# Simular um banco de dados com um arquivo JSON
+# Simular um banco de dados com um arquivo JSON 
 ARQUIVO_DB = 'tarefas.json'
 
 def carregar_tarefas():
