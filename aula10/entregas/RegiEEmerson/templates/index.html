@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Filmes</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Catálogo de Filmes</h1>
+  </header>
+  <section class="catalogo">
+    {% for filme in filmes %}
+    <div class="filme">
+      <h2>{{filme[1]}}</h2>
+      <img src="/static/img/a cabana.jpg" alt="{{filme[1]}}">
+    
+      <div class="descricao">
+        <p>{{filme[2]}}</p>
+      </div>
+      <div class="embaixo">
+      <a href="{{ filme[3] }}" target="_blank">Assistir no YouTube</a>
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <footer>
+    <button id="abrir-cadastro">Cadastrar Novo Filme</button>
+  </footer>
+
+  <div id="cadastro" class="modal">
+    <div class="modal-conteudo">
+      <span id="fechar-modal" class="fechar">&times;</span>
+      <h2>Cadastrar Novo Filme</h2>
+      <form id="form-cadastro">
+        <label for="nome">Nome do Filme:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+        
+        <label for="imagem">URL da Imagem:</label>
+        <input type="text" id="imagem" name="imagem" required><br><br>
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" required></textarea><br><br>
+
+        <label for="link">Link do YouTube:</label>
+        <input type="text" id="link" name="link" required><br><br>
+
+        <button type="submit">Cadastrar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
