@@ -1,0 +1,64 @@
+/* Estilo para a página */
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url(/static/images/apresentação\ de\ login.jpeg);
+    background-size:100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Centralizando a div de login no meio da tela */
+.login-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+    color: #fff;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    background-color: #222;
+    color: white;
+}
+
+input:focus {
+    border-color: #ffcc00;
+    outline: none;
+}
+
+button {
+    background-color: #ffcc00;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    color: #333;
+}
+
+button:hover {
+    background-color: #e6b800;
+}

@@ -1,0 +1,271 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+    font-family: Arial, sans-serif;
+    background-image: url(./images/cassinhinho.jpeg);
+    background-size: 100%;
+    text-align: center;
+    background-color: #1e1e1e;
+    margin: 0;
+    padding: 0;
+}
+
+.slot-machine {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.slots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.slot {
+    width: 80px;
+    height: 80px;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    color: black;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background: gold;
+    color: black;
+}
+
+button:hover {
+    background: orange;
+}
+
+.seupailogo{
+    position: fixed;
+    left: 15pt;
+    top: -5pt;
+
+    height: 180px;
+    width: 180px;
+    border: 5px #333 solid;
+}
+
+body {
+    background-color: #222;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: absolute;
+    top: 90%;
+}
+
+#marquee-text {
+    display: inline-block;
+    font-size: 20px;
+    color: gold;
+    animation: marqueeAnimation 10s linear infinite;
+}
+
+@keyframes marqueeAnimation {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #222;
+    color: white;
+}
+
+button {
+    background-color: #ffcc00;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #e6b800;
+}
+
+/* Estilo do popup */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.suporte{
+    position: fixed;
+    right: 10pt;
+    bottom: 60pt;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+   
+.setup-screen, .hidden {
+    display: none;
+}
+
+#setup-screen {
+    display: block;
+    margin-top: 50px;
+}
+
+.slots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.slot {
+    font-size: 3em;
+    padding: 10px;
+    background-color: #444;
+    border-radius: 10px;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+p {
+    font-size: 1.2em;
+}
+
+input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1.1em;
+    margin: 5px;
+    width: 150px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Estilos para os popups */
+#popup, #popup-add-money {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+    z-index: 1000;
+    width: 300px;
+    text-align: center;
+}
+
+#popup h2, #popup-add-money h2 {
+    margin-bottom: 10px;
+    color: #ffcc00;
+}
+
+#popup button, #popup-add-money button {
+    margin-top: 10px;
+    background-color: #ffcc00;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#popup button:hover, #popup-add-money button:hover {
+    background-color: #e6b800;
+}
+
+#popup-add-money input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+/* Botão fixo para abrir o popup de adicionar dinheiro */
+#add-money-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2em;
+    cursor: pointer;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+}
+
+#add-money-btn:hover {
+    background-color: #218838;
+}

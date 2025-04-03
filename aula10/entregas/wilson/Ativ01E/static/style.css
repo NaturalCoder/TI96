@@ -1,0 +1,273 @@
+/* RESET E BASE */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: linear-gradient(to right, #dfe9f3, #ffffff);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* CONTAINER PRINCIPAL */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.menu-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.menu-container h2 {
+  margin-bottom: 8px;
+}
+
+.menu-container p {
+  margin-bottom: 15px;
+}
+
+.menu-container .botao-acao {
+  margin: 5px;
+  padding: 10px 16px;
+  font-size: 15px;
+  border: none;
+  background-color: #6b5bff;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.menu-container .botao-acao:hover {
+  background-color: #5140d3;
+}
+
+/* SEÇÕES */
+.secao {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.secao h3 {
+  margin-bottom: 10px;
+}
+
+.oculto {
+  display: none !important;
+}
+
+/* FORMULÁRIO DE CADASTRO */
+#secao-cadastro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#secao-cadastro input,
+#secao-cadastro select {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+#secao-cadastro button[type="submit"] {
+  background-color: #6b5bff;
+  color: white;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+#secao-cadastro button[type="submit"]:hover {
+  background-color: #5140d3;
+}
+
+.gerador-container {
+  display: flex;
+  gap: 10px;
+}
+
+.gerador-container button {
+  padding: 10px;
+  font-size: 20px;
+  border: none;
+  background-color: #6b5bff;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* TABELAS */
+.tabela-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.tabela-relatorio {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.tabela-relatorio th,
+.tabela-relatorio td {
+  padding: 10px;
+  white-space: nowrap;
+}
+
+.tabela-relatorio th {
+  background-color: #f0f0f0;
+}
+
+.verde {
+  color: green;
+  font-weight: bold;
+}
+
+.vermelho {
+  color: red;
+  font-weight: bold;
+}
+
+/* RESPONSIVO */
+@media (max-width: 768px) {
+  .tabela-relatorio th,
+  .tabela-relatorio td {
+    font-size: 13px;
+  }
+
+  .menu-container .botao-acao {
+    width: 100%;
+    margin: 6px 0;
+  }
+}
+
+/* Botão gerar senha (cor padrão) */
+.gerador-container button {
+  padding: 10px;
+  font-size: 20px;
+  border: none;
+  background-color: #6b5bff; /* Roxo padrão */
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Hover */
+.gerador-container button:hover {
+  background-color: #5843e3;
+}
+
+/* Após o clique */
+.gerador-container button.clicked {
+  background-color: #20c997; /* Verde menta (ou escolha outro tom que curtir) */
+}
+
+.gerador-container button.clicked {
+  background-color: #20c997; /* Cor temporária após clique */
+}
+
+.categorias-botoes button {
+  background-color: #6b5bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.categorias-botoes button:hover {
+  background-color: #5140d3;
+}
+
+.menu-botoes button:hover,
+.categorias-botoes button:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.menu-botoes button.ativo {
+  background-color: #483D8B;
+  transform: scale(1.05);
+}
+
+.menu-botoes button.ativo {
+  background-color: #5140d3;
+  transform: scale(1.05);
+}
+
+.form-container {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+.login-container {
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  max-width: 800px;
+  width: 100%;
+}
+
+.info-container h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.info-container p {
+  margin-bottom: 20px;
+}
+
+.info-container button {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 10px 20px;
+  transition: all 0.3s;
+}
+
+.info-container button:hover {
+  background-color: white;
+  color: #6c63ff;
+}
+
+
+
+
