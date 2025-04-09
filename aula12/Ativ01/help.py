@@ -1,12 +1,12 @@
 class Aluno:
-    def __init__(self, id: int, nome: str, pontos: int = 0, perguntas: int = 0) -> None:
+    def __init__(self, id, nome, pontos = 0, perguntas = 0):
         self.id = id
         self.nome = nome
         self.pontos = pontos
         self.perguntas = perguntas
 
 class Turma:
-    def __init__(self, alunos: list) -> None:
+    def __init__(self, alunos):
         self.alunos = alunos
     
 
@@ -37,6 +37,7 @@ t = Turma([
 #crie um metodo que retorne o proximo aluno a responder uma pergunta
 #atenção apesar de esperar um aluno aleatório o mesmo aluno não pode ser chamado 
 #duas vezes consecutivas até que seja circulado todos os alunos do grupo
+#complete as anotações de tipo para todos os metodos (hints)
 t.proximo()
 
 
