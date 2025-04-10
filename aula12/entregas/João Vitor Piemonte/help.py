@@ -1,16 +1,36 @@
+import random, os
+from tabulate import tabulate 
 class Aluno:
     def __init__(self, id, nome, pontos = 0, perguntas = 0):
         self.id = id
         self.nome = nome
         self.pontos = pontos
         self.perguntas = perguntas
- 
- 
+    def registrar_resposta(self, pontos): 
+       self.pontos += pontos
+       return self.pontos
+
 class Turma:
-    def __init__(self, alunos):
+    def __init__(self, alunos : list[Aluno]):
         self.alunos = alunos
- 
-t = Turma([
+    def proximo(self):
+        m_n_perguntas = 999999
+        for aluno in self.alunos:
+            aluno.perguntas < m_n_perguntas
+            m_n_perguntas = aluno.perguntas
+
+        while True:
+            aluno = random.choice(self.alunos)
+            if aluno.perguntas == m_n_perguntas:
+                aluno.perguntas += 1
+                return aluno
+    def listar(self) -> str:
+        """Retorna uma tabela formatada com os alunos e seus pontos."""
+        tabela = [[aluno.id, aluno.nome, aluno.pontos, aluno.perguntas] for aluno in self.alunos]
+        return tabulate(tabela, headers=["ID", "Nome", "Pontos", "Perguntas"], tablefmt="grid")
+
+
+list_alunos = [
         Aluno(id=0, nome="Alisson do Nascimento Junior"),
         Aluno(id=1 , nome="Daiane da Silva Lourenço"),
         Aluno(id=2 , nome="David Gomes de Freitas"),
@@ -32,36 +52,41 @@ t = Turma([
         Aluno(id=18, nome="Valter André da Costa"),
         Aluno(id=19, nome="Victor Henrique Rossi Mazete"),
         Aluno(id=20, nome="Wilton Ferreira do Nascimento")
-    ])
- 
+    ]     
+
+t = Turma(list_alunos)
+
 #crie um metodo que retorne o proximo aluno a responder uma pergunta
-#atenção apesar de esperar um aluno aleatório o mesmo aluno não pode ser chamado
+#atenção apesar de esperar um aluno aleatório o mesmo aluno não pode ser chamado 
 #duas vezes consecutivas até que seja circulado todos os alunos do grupo
 #complete as anotações de tipo para todos os metodos (hints)
-pa = t.proximo()
- 
- 
+#pa = t.proximo()
+
+
 #crie o metodo que registre a resposta dada (no aluno)
-pa.registrar_resposta(pontos = 1)
- 
- 
+#pa.registrar_resposta(pontos = 1)
+
+
 #crie o metodo que liste os alunos e pontos
-t.listar()
- 
- 
+#t.listar()
+
+
 #crie um looping que pergunte, registre e mostre as respostas até cancelar
 while True :
+    os.system('cls')
     pa = t.proximo()
     print(f"Pergunta a {pa.nome}")
-    pontos = input("Resposta correta? 1 Parcial, 2 Total, 0 Incorreta")
+    pontos = int(input("Resposta correta?\n1 Parcial, 2 Total, 0 Incorreta\nQuantos pontos:"))
     pa.registrar_resposta(pontos)
- 
-    resp = input(f"Perguntar novamente? S/N")
- 
-    if resp == "N":
-        print(t.listar())
+
+    resp = input(f"Perguntar novamente? S/N") 
+    os.system('cls')
+
+    if resp == "N" or resp == "n":
+        os.system('cls')  # Limpa a tela antes de mostrar os resultados finais
+        print("Finalizando")
+        print(t.listar())  # Exibe a tabela formatada
         break
- 
 
 
 
