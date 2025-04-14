@@ -1,5 +1,5 @@
 import random, os
-from tabulate import tabulate 
+from tabulate import tabulate
 class Aluno:
     def __init__(self, id, nome, pontos = 0, perguntas = 0):
         self.id = id
