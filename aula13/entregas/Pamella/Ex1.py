@@ -11,7 +11,7 @@ from datetime import datetime
 # Classe que representa um aluno
 class Aluno:
     def __init__(self, id, nome, pontos = 0, perguntas = 4):
-        self.log = []  # Lista para armazenar o histórico de alterações de pontuação
+        self.log = []  # Lista para armazenar o histórico de alterações de pontuação - EXERCICIO 1 - PARTE 1
         self.id = id  # ID do aluno
         self.nome = nome  # Nome do aluno
         self.pontos = pontos  # Pontos acumulados pelas respostas
@@ -22,7 +22,7 @@ class Aluno:
         agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")  # Captura a data e hora atual
         self.log.append(f"[{agora}] +{pontos} ponto(s), total: {self.pontos}")  # Adiciona ao log
 
-    def exibir_log(self):
+    def exibir_log(self): #EXERCICIO 1 - PARTE 1
         return "\n".join(self.log) if self.log else "Nenhum registro ainda."
 
 # Classe que representa uma turma com vários alunos
@@ -94,7 +94,9 @@ while True :
         print(t.listar())  # Mostra a tabela final com os resultados
         break  # Encerra o loop
 
-print("\nLOG DE ALTERAÇÕES DE PONTOS:")
+print("\nLOG DE ALTERAÇÕES DE PONTOS:") # LOG PARA PRINTAR - EXERCICIO 1 - PARTE 2
 for aluno in lista_alunos:
     print(f"\n{aluno.nome}:")
     print(aluno.exibir_log())
+
+# ================= EXERCÍCIO 2 – PARTE 1 e 2: CLASSE RECEITA COM MENU =================
