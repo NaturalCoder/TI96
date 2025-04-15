@@ -1,3 +1,8 @@
+#Este programa em Python simula uma dinâmica de perguntas em sala de aula, onde alunos são selecionados de forma justa com base na quantidade de vezes que já responderam. 
+# A cada rodada, o sistema escolhe aleatoriamente entre os que têm menos participações e permite ao usuário registrar se a resposta foi incorreta, parcial ou totalmente 
+# correta, atribuindo pontos conforme o desempenho. Ao final da atividade, uma tabela organizada exibe o nome de cada aluno, o número de perguntas respondidas e sua pontuação 
+# acumulada, facilitando o acompanhamento da participação de todos.
+
 import random, os  # Importa módulos: random (para sorteios) e os (não usado no código atual)
 from tabulate import tabulate  # Importa função para formatar dados em tabelas
 
@@ -29,8 +34,17 @@ class Turma:
                 aluno.perguntas += 1  # ...contabiliza mais uma pergunta para ele
                 return aluno  # Retorna esse aluno para a rodada
 
-    def listar(self):  # Formata a lista de alunos em uma tabela
-        return tabulate(Turma(lista_alunos))  # (Essa linha está errada: deveria usar self.alunos)
+    def listar(self):  # Define o método 'listar' da classe Turma, que irá exibir os dados dos alunos em formato de tabela.
+        dados = [[aluno.id, aluno.nome, aluno.pontos, aluno.perguntas] for aluno in self.alunos]
+        # Cria uma lista chamada 'dados', onde:
+        # - Cada item da lista será outra lista com 4 elementos: [id, nome, pontos, perguntas]
+        # - Essa estrutura é construída para cada 'aluno' presente na lista self.alunos
+        # Resultado: uma tabela de dados com os atributos principais de cada aluno da turma.
+        return tabulate(dados, headers=["ID", "Nome", "Pontos", "Perguntas"], tablefmt="fancy_grid")
+        # A função 'tabulate' transforma a lista de listas (dados) em uma tabela formatada de texto.
+        # 'headers' define os títulos das colunas.
+        # 'tablefmt="fancy_grid"' define o estilo visual da tabela (com bordas e separadores).
+        # A tabela gerada é retornada para ser exibida onde o método for chamado.
 
 # Lista de alunos da turma
 lista_alunos = [
@@ -68,6 +82,6 @@ while True :
 
     resp = input(f"Perguntar novamente? S/N: ")  # Pergunta se deve continuar
 
-    if resp == "N":  # Se a resposta for N (não)...
+    if resp == "N" or "n":  # Se a resposta for N (não)...
         print(t.listar())  # Mostra a tabela final com os resultados
         break  # Encerra o loop
