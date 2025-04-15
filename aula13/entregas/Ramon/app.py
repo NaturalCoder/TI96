@@ -10,7 +10,7 @@ class Aluno():
  
     def registrar_resposta(self, pontos):
         self.pontos += pontos
-        self.perguntas += 1
+        self.perguntas += 13
         return self.pontos
  
 class Turma():
@@ -96,4 +96,3 @@ while True:
     else:
         print("Opção inválida.")
         input("\nPressione ENTER para tentar novamente...")
- 
