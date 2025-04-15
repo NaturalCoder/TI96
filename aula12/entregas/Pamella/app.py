@@ -5,17 +5,25 @@
 
 import random, os  # Importa módulos: random (para sorteios) e os (não usado no código atual)
 from tabulate import tabulate  # Importa função para formatar dados em tabelas
+from datetime import datetime
+
 
 # Classe que representa um aluno
 class Aluno:
     def __init__(self, id, nome, pontos = 0, perguntas = 4):
+        self.log = []  # Lista para armazenar o histórico de alterações de pontuação
         self.id = id  # ID do aluno
         self.nome = nome  # Nome do aluno
         self.pontos = pontos  # Pontos acumulados pelas respostas
         self.perguntas = perguntas  # Quantidade de vezes que já respondeu (default é 4)
 
     def registrar_resposta(self, pontos):
-        self.pontos += pontos  # Adiciona os pontos da resposta ao total do aluno
+        self.pontos += pontos  # Atualiza os pontos totais
+        agora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")  # Captura a data e hora atual
+        self.log.append(f"[{agora}] +{pontos} ponto(s), total: {self.pontos}")  # Adiciona ao log
+
+    def exibir_log(self):
+        return "\n".join(self.log) if self.log else "Nenhum registro ainda."
 
 # Classe que representa uma turma com vários alunos
 class Turma:
@@ -82,6 +90,11 @@ while True :
 
     resp = input(f"Perguntar novamente? S/N: ")  # Pergunta se deve continuar
 
-    if resp == "N" or "n":  # Se a resposta for N (não)...
+    if resp == "N" or resp == "n":  # Se a resposta for N (não)...
         print(t.listar())  # Mostra a tabela final com os resultados
         break  # Encerra o loop
+
+print("\nLOG DE ALTERAÇÕES DE PONTOS:")
+for aluno in lista_alunos:
+    print(f"\n{aluno.nome}:")
+    print(aluno.exibir_log())
