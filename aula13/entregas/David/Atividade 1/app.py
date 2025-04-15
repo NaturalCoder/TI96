@@ -1,5 +1,5 @@
 import random, os
-from tabulate import tabulate
+from tabulate import tabulate 
 class Aluno:
     def __init__(self, id, nome, pontos = 0, perguntas = 0):
         self.id = id
@@ -56,7 +56,7 @@ list_alunos = [
 
 t = Turma(list_alunos)
 
-#crie um metodo que retorne o proximo aluno a responder uma pergunta
+#crie um metodo que retorne o proximo aluno a responder uma pergunta ,
 #atenção apesar de esperar um aluno aleatório o mesmo aluno não pode ser chamado 
 #duas vezes consecutivas até que seja circulado todos os alunos do grupo
 #complete as anotações de tipo para todos os metodos (hints)
