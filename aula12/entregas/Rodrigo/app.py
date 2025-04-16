@@ -1,7 +1,7 @@
 import random
 from typing import List, Optional
  
- 
+#teste
 class Aluno:
     def __init__(self, id: int, nome: str, pontos: int = 0, perguntas: int = 0) -> None:
         self.id = id
