@@ -1,39 +1,39 @@
 import random, os
 from tabulate import tabulate
- 
+
 class Aluno():
     def __init__(self, id, nome, pontos=0, perguntas=0):
         self.id = id
         self.nome = nome
         self.pontos = pontos
         self.perguntas = perguntas
- 
+
     def registrar_resposta(self, pontos):
         self.pontos += pontos
         self.perguntas += 1
         return self.pontos
- 
+
 class Turma():
     def __init__(self, alunos: list[Aluno]):
         self.alunos = alunos
         self.logs = []  # Lista para armazenar os logs
- 
+
     def proximo(self):
         m_n_perguntas = min(aluno.perguntas for aluno in self.alunos)
         candidatos = [aluno for aluno in self.alunos if aluno.perguntas == m_n_perguntas]
         return random.choice(candidatos)
- 
+
     def listar(self) -> str:
         """Retorna uma tabela formatada com os alunos e seus pontos."""
         tabela = [[aluno.id, aluno.nome, aluno.pontos, aluno.perguntas] for aluno in self.alunos]
         return tabulate(tabela, headers=["ID", "Nome", "Pontos", "Perguntas"], tablefmt="grid")
- 
+
     def mostrar_logs(self) -> str:
         if not self.logs:
             return "Nenhum log registrado ainda."
         tabela_logs = tabulate(self.logs, headers=["ID", "Nome", "Pontos Recebidos", "Total de Perguntas"], tablefmt="grid")
         return tabela_logs
- 
+
 # Lista de alunos
 list_alunos = [
     Aluno(id=0, nome="Alisson do Nascimento Junior"),
@@ -58,20 +58,20 @@ list_alunos = [
     Aluno(id=19, nome="Victor Henrique Rossi Mazete"),
     Aluno(id=20, nome="Wilton Ferreira do Nascimento")
 ]
- 
+
 #criando turma
 t = Turma(list_alunos)
- 
+
 #loop com menu
 while True:
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("=== MENU ===")
+    print("MENU")
     print("1. Fazer pergunta")
     print("2. Ver ranking")
     print("3. Ver logs")
     print("0. Sair")
     escolha = input("Escolha uma opção: ")
- 
+
     if escolha == "1":
         os.system('cls' if os.name == 'nt' else 'clear')
         pa = t.proximo()
@@ -96,4 +96,3 @@ while True:
     else:
         print("Opção inválida.")
         input("\nPressione ENTER para tentar novamente...")
- 

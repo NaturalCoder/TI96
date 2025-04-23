@@ -1,16 +1,44 @@
+from datetime import datetime
 import random, os
-from tabulate import tabulate
-class Aluno:
+from tabulate import tabulate 
+
+class Aluno():
     def __init__(self, id, nome, pontos = 0, perguntas = 0):
         self.id = id
         self.nome = nome
         self.pontos = pontos
         self.perguntas = perguntas
-    def registrar_resposta(self, pontos): 
-       self.pontos += pontos
-       return self.pontos
+        self.log_pontos = []
 
-class Turma:
+    def registrar_resposta(self, pontos):
+       data_hora = datetime.now()
+       print(data_hora.strftime("%A, %d de %B de %Y"))
+
+       descricao = "Total" if pontos == 2 else "Parcial" if pontos == 1 else "Incorreta" 
+
+       self.log_pontos.append ({
+           "data_hora": data_hora,
+            "alteracao": descricao,
+            "pontos": pontos
+
+       })        
+         
+       
+       self.pontos += pontos
+       self.perguntas += 1
+       return self.pontos
+    
+    def mostrar_log(self):
+        """Método para exibir o log de alterações de pontos"""
+        log_str = f"\nHistórico de alterações de pontos para {self.nome}:"
+        for log in self.log_pontos:
+            log_str += f"\n{log['data_hora']} - {log['alteracao']}: {log['pontos']} pontos"
+        if len(self.log_pontos) == 0:
+            return ""
+        return log_str
+    
+
+class Turma():
     def __init__(self, alunos : list[Aluno]):
         self.alunos = alunos
     def proximo(self):
@@ -22,8 +50,8 @@ class Turma:
         while True:
             aluno = random.choice(self.alunos)
             if aluno.perguntas == m_n_perguntas:
-                aluno.perguntas += 1
                 return aluno
+            
     def listar(self) -> str:
         """Retorna uma tabela formatada com os alunos e seus pontos."""
         tabela = [[aluno.id, aluno.nome, aluno.pontos, aluno.perguntas] for aluno in self.alunos]
@@ -56,37 +84,57 @@ list_alunos = [
 
 t = Turma(list_alunos)
 
-#crie um metodo que retorne o proximo aluno a responder uma pergunta
-#atenção apesar de esperar um aluno aleatório o mesmo aluno não pode ser chamado 
-#duas vezes consecutivas até que seja circulado todos os alunos do grupo
-#complete as anotações de tipo para todos os metodos (hints)
-#pa = t.proximo()
 
 
-#crie o metodo que registre a resposta dada (no aluno)
-#pa.registrar_resposta(pontos = 1)
+#
+# looping que pergunta, registra e mostra
 
+    #os.system('cls')
+    #pa = t.proximo()
+    #print(f"Pergunta a {pa.nome}")
+    #pontos = int(input("Resposta correta?\n1 Parcial, 2 Total, 0 Incorreta\nQuantos pontos:"))
+    #pa.registrar_resposta(pontos)
 
-#crie o metodo que liste os alunos e pontos
-#t.listar()
+    #resp = input(f"Perguntar novamente? S/N") 
+    #os.system('cls')
 
+    #if resp == "N" or resp == "n":
+    #os.system('cls')  # Limpa a tela antes de mostrar os resultados finais
+    #print("Finalizando")
+    #print(t.listar())  # Exibe a tabela formatada
+    #break
 
-#crie um looping que pergunte, registre e mostre as respostas até cancelar
 while True :
     os.system('cls')
-    pa = t.proximo()
-    print(f"Pergunta a {pa.nome}")
-    pontos = int(input("Resposta correta?\n1 Parcial, 2 Total, 0 Incorreta\nQuantos pontos:"))
-    pa.registrar_resposta(pontos)
+    print("Menu:")
+    print("1. Fazer Pergunta")
+    print("2. Ver Log de Alterações de Pontos")
+    print("3. Finalizar")
+    opcao = input("Escolha uma opção: ")
 
-    resp = input(f"Perguntar novamente? S/N") 
-    os.system('cls')
+    if opcao == "1":
+        pa = t.proximo()
+        print(f"Pergunta a {pa.nome}")
+        pontos = int(input("Resposta correta?\n1 Parcial, 2 Total, 0 Incorreta\nQuantos pontos:"))
+        pa.registrar_resposta(pontos)
 
-    if resp == "N" or resp == "n":
+    elif opcao == "2":
+        os.system('cls')
+        # Exibe os logs de alterações de pontos para cada aluno
+        for aluno in t.alunos:
+            print(aluno.mostrar_log())
+        input("Pressione qualquer tecla para voltar ao menu...")
+
+    elif opcao == "3":
         os.system('cls')  # Limpa a tela antes de mostrar os resultados finais
         print("Finalizando")
         print(t.listar())  # Exibe a tabela formatada
         break
+
+    else:
+        print("Opção inválida, tente novamente.")
+        input("Pressione qualquer tecla para continuar...")
+    
 
 
 
