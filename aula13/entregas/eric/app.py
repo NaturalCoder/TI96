@@ -1,19 +1,35 @@
 import random, os
-from tabulate import tabulate
-class Aluno:
+from tabulate import tabulate 
+from datetime import datetime
+
+class Aluno():
     def __init__(self, id, nome, pontos = 0, perguntas = 0):
         self.id = id
         self.nome = nome
         self.pontos = pontos
         self.perguntas = perguntas
+        self.logs = []  
+
+    
     def registrar_resposta(self, pontos): 
+       # Registra a alteração no log antes de atualizar os pontos
+       self.logs.append({
+           'data_hora': datetime.now(),
+           'pontos_antes' : self.pontos,
+           'pontos_depois' : self.pontos + pontos 
+          
+       })
+
        self.pontos += pontos
+       self.perguntas += 1
        return self.pontos
 
-class Turma:
+class Turma():
     def __init__(self, alunos : list[Aluno]):
         self.alunos = alunos
+
     def proximo(self):
+        
         m_n_perguntas = 999999
         for aluno in self.alunos:
             aluno.perguntas < m_n_perguntas
@@ -22,12 +38,35 @@ class Turma:
         while True:
             aluno = random.choice(self.alunos)
             if aluno.perguntas == m_n_perguntas:
-                aluno.perguntas += 1
                 return aluno
     def listar(self) -> str:
         """Retorna uma tabela formatada com os alunos e seus pontos."""
         tabela = [[aluno.id, aluno.nome, aluno.pontos, aluno.perguntas] for aluno in self.alunos]
         return tabulate(tabela, headers=["ID", "Nome", "Pontos", "Perguntas"], tablefmt="grid")
+
+
+ # <-- NOVO MÉTODO ADICIONADO PARA MOSTRAR LOGS
+    def mostrar_logs(self):
+        """Retorna uma tabela com todos os logs de alteração de pontos"""
+        logs_todos_alunos = []
+        for aluno in self.alunos:
+            for log in aluno.logs:
+                logs_todos_alunos.append([
+                    aluno.id,
+                    aluno.nome,
+                    log['data_hora'].strftime("%d/%m/%Y %H:%M:%S"),
+                    log['pontos_antes'],
+                    log['pontos_depois'],
+                ])
+        
+        # Ordena do mais antigof para o mais novo ------>
+        logs_todos_alunos.sort(key=lambda x: x[2], reverse=True)
+        
+        return tabulate(
+            logs_todos_alunos,
+            headers=["ID", "Nome", "Data/Hora", "Pontos Antes", "Pontos Adicionados", "Pontos Depois"],
+            tablefmt="grid"
+        )
 
 
 list_alunos = [
@@ -56,37 +95,36 @@ list_alunos = [
 
 t = Turma(list_alunos)
 
-#crie um metodo que retorne o proximo aluno a responder uma pergunta
-#atenção apesar de esperar um aluno aleatório o mesmo aluno não pode ser chamado 
-#duas vezes consecutivas até que seja circulado todos os alunos do grupo
-#complete as anotações de tipo para todos os metodos (hints)
-#pa = t.proximo()
 
 
-#crie o metodo que registre a resposta dada (no aluno)
-#pa.registrar_resposta(pontos = 1)
-
-
-#crie o metodo que liste os alunos e pontos
-#t.listar()
-
-
-#crie um looping que pergunte, registre e mostre as respostas até cancelar
+#looping que pergunta, registra e mostra
 while True :
     os.system('cls')
-    pa = t.proximo()
-    print(f"Pergunta a {pa.nome}")
-    pontos = int(input("Resposta correta?\n1 Parcial, 2 Total, 0 Incorreta\nQuantos pontos:"))
-    pa.registrar_resposta(pontos)
+    print("1 - Próxima pergunta")  
+    print("2 - Ver logs de alterações")
+    print("0 - Sair")
 
-    resp = input(f"Perguntar novamente? S/N") 
-    os.system('cls')
+    opcao = input("Escolha uma opção\n ")
 
-    if resp == "N" or resp == "n":
-        os.system('cls')  # Limpa a tela antes de mostrar os resultados finais
-        print("Finalizando")
-        print(t.listar())  # Exibe a tabela formatada
-        break
+    if opcao == "1":
+        os.system('cls')
+        pa = t.proximo()
+        print(f"Pergunta a {pa.nome}")
+        pontos = int(input("Resposta correta?\n1 Parcial, 2 Total, 0 Incorreta\nQuantos pontos:\n"))
+        pa.registrar_resposta(pontos)
+
+    resposta = input(f"Perguntar novamente? S/N\n ") 
+    if resposta.lower() == 'n' :
+        continue
+
+    elif opcao == "2": 
+     os.system('cls')
+     print(t.mostrar_logs())
+     input("\nPresione Enter para continuar...\n ")
 
 
-
+    elif opcao == "0":
+     os.system('cls')
+     print("Finalizando")
+     print(t.listar())
+     break
