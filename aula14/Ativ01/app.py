@@ -9,9 +9,7 @@ class Receita():
         """Adiciona um ingrediente à lista de ingredientes da receita."""
         self.ingredientes.append(ingrediente)
 
-    def adicionar_modo_preparo(self, etapa):
-        """Adiciona uma etapa ao modo de preparo da receita."""
-        self.modo_preparo.append(etapa)
+
 
     def exibir_receita(self):
         """Exibe a receita formatada com ingredientes e modo de preparo."""
