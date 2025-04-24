@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Receitas</title>
+</head>
+<body>
+    <header>
+        <h1>Menu de Receitas</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('nova_receita') }}">Nova Receita</a></li>
+                <li><a href="{{ url_for('listar_receitas') }}">Ver Receitas Salvas</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Receitas Cadastradas</h2>
+        <ul>
+            {% for receita in receitas %}
+                <li><a href="{{ url_for('detalhes_receita', receita_id=receita.id) }}">{{ receita.nome }}</a></li>
+            {% else %}
+                <li>Nenhuma receita cadastrada.</li>
+            {% endfor %}
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; 2023 Receitas</p>
+    </footer>
+</body>
+</html>
