@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Receitas</title>
+</head>
+<body>
+    <h1>Lista de Receitas</h1>
+    {% if receitas %}
+        <ul>
+            {% for receita in receitas %}
+                <li>
+                    <strong>{{ receita.nome }}</strong><br>
+                    Ingredientes: {{ receita.ingredientes | join(', ') }}<br>
+                    Modo de Preparo: {{ receita.modo_preparo }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma receita cadastrada.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}">Voltar</a>
+</body>
+</html>
