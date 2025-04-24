@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Receita</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    form {
+      max-width: 600px;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border-radius: 5px;
+      border: 1px solid #9e3939;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #28a745;
+      color: rgb(238, 238, 238);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #28a745;
+    }
+  </style>
+</head>
+<body>
+
+    <h1>Cadastrar Receita</h1>
+    <form action="/salvar" method="POST">
+        <label for="titulo">Título da Receita</label>
+        <input type="text" id="titulo" name="titulo" required>
+
+        <label for="ingredientes">Ingredientes</label>
+        <textarea id="ingredientes" name="ingredientes" rows="5" required></textarea>
+
+        <label for="modo_preparo">Modo de Preparo</label>
+        <textarea id="modo_preparo" name="modo_preparo" rows="5" required></textarea>
+
+        <label for="tempo">Tempo de Preparo (minutos)</label>
+        <input type="number" id="tempo" name="tempo" min="1">
+
+        <button type="submit">Cadastrar Receita</button>
+    </form>
+
+</body>
+</html>
