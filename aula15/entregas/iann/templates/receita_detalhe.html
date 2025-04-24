@@ -1,0 +1,30 @@
+receita_detalhe.html
+ 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ receita.nome }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1 class="recipe-title">{{ receita.nome }}</h1>
+ 
+    <h3 class="section-title">Ingredientes:</h3>
+    <ul class="ingredients-list">
+        {% for ing in receita.ingredientes %}
+        <li class="ingredient-item">{{ ing }}</li>
+        {% endfor %}
+    </ul>
+ 
+    <h3 class="section-title">Modo de Preparo:</h3>
+    <ol class="preparation-steps">
+        {% for etapa in receita.modo_preparo %}
+        <li class="preparation-step">{{ etapa }}</li>
+        {% endfor %}
+    </ol>
+ 
+    <a href="{{ url_for('index') }}" class="back-link">Voltar ao menu</a>
+</body>
+</html>
+ 
