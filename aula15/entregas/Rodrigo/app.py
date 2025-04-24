@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-
+# Lista para armazenar as receitas
 receitas = []
 
 class Receita:
@@ -26,8 +26,8 @@ def nova_receita():
 
         ingredientes = request.form.getlist('ingredientes')
         for ing in ingredientes:
-            if ing.strip():  
-                nova.adicionar_ingrediente(ing.strip())
+            if ing:
+                nova.adicionar_ingrediente(ing)
 
         nova.modo_preparo = request.form['modo_preparo']
         receitas.append(nova)
@@ -35,13 +35,10 @@ def nova_receita():
 
     return render_template('nova_receita.html')
 
-@app.route('/detalhes_receita/<int:receita_id>')
-def detalhes_receita(receita_id):
-    if 0 <= receita_id < len(receitas):
-        receita = receitas[receita_id]
-        return render_template('detalhes.html', receita=receita)
-    else:
-        return "Receita não encontrada", 404
+@app.route('/detalhes/<int:receita_id>')
+def detalhes(receita_id):
+    receita = receitas[receita_id]
+    return render_template('detalhes.html', receita=receita)
 
 if __name__ == '__main__':
     app.run(debug=True)

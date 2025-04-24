@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Receitas da Regi</title>
+</head>
+<body>
+    <h1>Minhas Receitas</h1>
+    <a href="/cadastrar">+ Nova Receita</a><br><br>
+
+    {% if receitas %}
+        <ul>
+        {% for r in receitas %}
+            <li>
+                <strong>{{ r.nome }}</strong>
+                [<a href="{{ url_for('ver_receita', id=r.id) }}">ver</a>]
+                <form action="{{ url_for('excluir_receita', id=r.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Tem certeza que deseja excluir esta receita?')">Excluir</button>
+                </form>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma receita cadastrada ainda.</p>
+    {% endif %}
+</body>
+</html>

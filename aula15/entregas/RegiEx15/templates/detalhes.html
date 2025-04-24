@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ receita.nome }}</title>
+</head>
+<body>
+    <h1>{{ receita.nome }}</h1>
+    <h3>Ingredientes:</h3>
+    <ul>
+        {% for item in receita.ingredientes %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">← Voltar</a>
+</body>
+</html>

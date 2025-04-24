@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Receitas</title>
+</head>
+<body>
+  <h1>Receitas Cadastradas</h1>
+
+  {% if receitas %}
+    <ul>
+      {% for r in receitas %}
+        <li>
+          <h2>{{ r.titulo }}</h2>
+          <p><strong>Ingredientes:</strong> {{ r.ingredientes }}</p>
+          <p><strong>Modo de Preparo:</strong> {{ r.modo_preparo }}</p>
+          <p><strong>Tempo de Preparo:</strong> {{ r.tempo }} min</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nenhuma receita cadastrada ainda.</p>
+  {% endif %}
+
+  <a href="/">Voltar ao menu</a>
+</body>
+</html>

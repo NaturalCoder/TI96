@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Nova Receita</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Adicionar Nova Receita</h1>
+        <form action="/nova_receita" method="POST">
+            <label for="nome">Nome da Receita:</label>
+            <input type="text" id="nome" name="nome" required>
+
+            <label for="ingredientes">Ingredientes (separados por vírgula):</label>
+            <textarea id="ingredientes" name="ingredientes" required></textarea>
+
+            <label for="modo_preparo">Modo de Preparo:</label>
+            <textarea id="modo_preparo" name="modo_preparo" required></textarea>
+
+            <button type="submit">Adicionar Receita</button>
+        </form>
+        <a href="/">Voltar para o menu</a>
+    </div>
+</body>
+</html>
