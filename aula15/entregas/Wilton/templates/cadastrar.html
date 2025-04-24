@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Receita</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Cadastrar Nova Receita</h1>
+    <form action="{{ url_for('cadastrar') }}" method="post">
+        <label for="nome">Nome da Receita:</label><br>
+        <input type="text" id="nome" name="nome" required><br><br>
+        
+        <label for="ingredientes">Ingredientes:</label><br>
+        <div id="ingredientes">
+            <input type="text" name="ingredientes" placeholder="Exemplo: Chocolate 70%" required><br><br>
+        </div>
+        <button type="button" onclick="addIngrediente()">Adicionar Ingrediente</button><br><br>
+        
+        <label for="modo_preparo">Modo de Preparo:</label><br>
+        <div id="modo_preparo">
+            <input type="text" name="modo_preparo" placeholder="Exemplo: Misture tudo" required><br><br>
+        </div>
+        <button type="button" onclick="addModoPreparo()">Adicionar Etapa</button><br><br>
+        
+        <input type="submit" value="Cadastrar">
+    </form>
+    <br>
+    <a href="{{ url_for('home') }}">Voltar à lista de receitas</a>
+
+    <script>
+        // Função para adicionar novo campo de ingrediente
+        function addIngrediente() {
+            var div = document.getElementById("ingredientes");
+            var input = document.createElement("input");
+            input.type = "text";
+            input.name = "ingredientes";
+            input.placeholder = "Exemplo: Chocolate 70%";
+            div.appendChild(input);
+            div.appendChild(document.createElement("br"));
+        }
+
+        // Função para adicionar novo campo de etapa de preparo
+        function addModoPreparo() {
+            var div = document.getElementById("modo_preparo");
+            var input = document.createElement("input");
+            input.type = "text";
+            input.name = "modo_preparo";
+            input.placeholder = "Exemplo: Misture tudo";
+            div.appendChild(input);
+            div.appendChild(document.createElement("br"));
+        }
+    </script>
+</body>
+</html>
