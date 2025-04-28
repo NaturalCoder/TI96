@@ -1,5 +1,3 @@
-import random
-
 class Aluno:
     def __init__(self, id, nome, pontos = 0, perguntas = 0):
         self.id = id
@@ -7,25 +5,10 @@ class Aluno:
         self.pontos = pontos
         self.perguntas = perguntas
 
-    def registrar_resposta(self, pontos):
-        pass
-
-
 
 class Turma:
-    def __init__(self, alunos: list[Aluno]):
+    def __init__(self, alunos):
         self.alunos = alunos
-    
-    def proximo(self):
-        pa = random.randrange(0,20) 
-        return self.alunos[pa]
-    
-    def listar(self):
-        ret = ""
-        for a in self.alunos:
-            ret += f"Aluno {a.nome} fez {a.pontos} pontos\n" 
-        return ret
-    
 
 t = Turma([
         Aluno(id=0, nome="Alisson do Nascimento Junior"),
@@ -51,29 +34,31 @@ t = Turma([
         Aluno(id=20, nome="Wilton Ferreira do Nascimento")
     ])
 
-
 #crie um metodo que retorne o proximo aluno a responder uma pergunta
 #atenção apesar de esperar um aluno aleatório o mesmo aluno não pode ser chamado 
 #duas vezes consecutivas até que seja circulado todos os alunos do grupo
-#complete as anotações de tipo para todos os metodos (hints)m
+#complete as anotações de tipo para todos os metodos (hints)
+pa = t.proximo()
 
 
+#crie o metodo que registre a resposta dada (no aluno)
+pa.registrar_resposta(pontos = 1)
 
 
-
+#crie o metodo que liste os alunos e pontos
+t.listar()
 
 
 #crie um looping que pergunte, registre e mostre as respostas até cancelar
 while True :
     pa = t.proximo()
     print(f"Pergunta a {pa.nome}")
-
-    pontos = input("Resposta correta? 1 Parcial, 2 Total, 0 Incorreta: ")
+    pontos = input("Resposta correta? 1 Parcial, 2 Total, 0 Incorreta")
     pa.registrar_resposta(pontos)
 
-    resp = input(f"Perguntar novamente? S/N :")
+    resp = input(f"Perguntar novamente? S/N")
 
-    if resp in ["n", "N"]:
+    if resp == "N":
         print(t.listar())
         break
 

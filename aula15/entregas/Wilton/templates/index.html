@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receitas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Lista de Receitas</h1>
+    <div style="justify-content: center; display: flex;">
+    <table>
+        {% for receita in receitas %}
+            <tr>
+                <td><a href="{{ url_for('receita', nome=receita) }}">{{ receita }}</a></td>
+                <td><a href="{{ url_for('excluir', nome=receita) }}" class="botao-link">Excluir</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    <a href="{{ url_for('cadastrar') }}">Cadastrar Nova Receita</a>
+</body>
+</html>

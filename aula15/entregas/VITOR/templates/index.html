@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Receitas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h1 class="header">Minhas Receitas</h1>
+    <a href="{{ url_for('nova_receita') }}" class="button">Cadastrar nova receita</a>
+    <ul class="recipe-list">
+        {% for receita in receitas %}
+        {% set i = loop.index0 %}
+        <li class="recipe-item">
+            <a href="{{ url_for('mostrar_receita', indice=i) }}" class="recipe-link">{{ receita.nome }}</a>
+            (<a href="{{ url_for('excluir_receita', indice=i) }}" class="delete-link">Excluir</a>)
+        </li>
+        {% else %}
+        <li class="no-recipes">Nenhuma receita cadastrada.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+

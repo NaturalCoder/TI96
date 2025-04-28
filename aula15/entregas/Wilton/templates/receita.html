@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ receita['nome'] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>{{ receita['nome'] }}</h1>
+    <h2>Ingredientes:</h2>
+    <ul>
+        {% for ingrediente in receita['ingredientes'] %}
+            <li>{{ ingrediente }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Modo de Preparo:</h2>
+    <ol>
+        {% for etapa in receita['modo_preparo'] %}
+            <li>{{ etapa }}</li>
+        {% endfor %}
+    </ol>
+    <br>
+    <a href="{{ url_for('home') }}">Voltar à lista de receitas</a>
+</body>
+</html>

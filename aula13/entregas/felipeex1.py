@@ -65,7 +65,7 @@ t = Turma(list_alunos)
 #loop com menu
 while True:
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("=== MENU ===")
+    print("MENU")
     print("1. Fazer pergunta")
     print("2. Ver ranking")
     print("3. Ver logs")
