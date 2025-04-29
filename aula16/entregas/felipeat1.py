@@ -18,7 +18,7 @@ def main():
         print(f"O resultado da divisão é: {resultado}")
         
     except ZeroDivisionError:
-        print("Erro: Divisão por zero não é permitida.")
+        print("Erro: Não é permitido por zero.")
         
     except ValueError:
         print("Erro: Você precisa digitar um número válido.")
