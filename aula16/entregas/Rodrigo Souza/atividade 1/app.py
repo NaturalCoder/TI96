@@ -31,5 +31,3 @@ divisao_segura()
 
 
 
-
-
