@@ -39,3 +39,24 @@ def validar_cpf(cpf):
         return False
     
     return True
+
+
+
+from algosdk import account
+
+def gerar_chaves():
+    """
+    Gera um par de chaves (chave privada e endereço público) usando a biblioteca algosdk.
+    
+    Returns:
+        tuple: Chave privada e endereço público
+    """
+    
+    # Gerar par de chaves
+    private_key, public_address = account.generate_account()
+
+    #print("Chave Privada:", private_key)
+    #print("Endereço Público (Chave Pública):", public_address)
+    
+    return private_key, public_address
+
