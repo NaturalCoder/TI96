@@ -42,7 +42,7 @@ def validar_cpf(cpf):
 
 
 
-from algosdk import account
+from algosdk import account, encoding
 
 def gerar_chaves():
     """
@@ -60,3 +60,20 @@ def gerar_chaves():
     
     return private_key, public_address
 
+def endereco_eh_valido(address):
+    """
+    Verifica se um endereço é válido usando a biblioteca algosdk.
+    
+    Args:
+        address: String contendo o endereço a ser verificado
+    
+    Returns:
+        bool: True se o endereço é válido, False caso contrário
+    """
+    
+    try:
+        # Verifica se o endereço é válido
+        return encoding.is_valid_address(address)
+    except Exception as e:
+        #print(f"Erro ao verificar o endereço: {e}")
+        return False
