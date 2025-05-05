@@ -21,7 +21,7 @@ def main():
         print("Erro: Divisão por zero não é permitida.")
         
     except ValueError:
-        print("Erro: Você precisa digitar um número válido.")
+        print("Erro: Digite um número válido.")
 
 if __name__ == "__main__":
     main()
