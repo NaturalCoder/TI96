@@ -9,4 +9,3 @@ Crie um programa que:
 """
 
 
-divisao_segura()
