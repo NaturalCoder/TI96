@@ -26,4 +26,4 @@ def ler_arquivo(nome_arquivo):
             print("Nenhum arquivo foi aberto.")
 
 # Teste com erro proposital no nome do arquivo
-ler_arquivo("dadosXX.txt")
+ler_arquivo("dadosxx.txt")
