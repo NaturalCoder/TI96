@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postagens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #6200ea;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+        }
+        a {
+            color: #6200ea;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mural</h1>
+    </header>
+    <main>
+        <a href="{{ url_for('adicionar_postagem') }}">Adicionar Nova Postagem</a>
+        <ul>
+            {% for postagem in postagens %}
+            <li>
+                <h2>{{ postagem.titulo }}</h2>
+                <p>{{ postagem.conteudo }}</p>
+                <small>Criado em: {{ postagem.criado_em }}</small>
+                <br>
+                <a href="{{ url_for('editar_postagem', id=postagem.id) }}">Editar</a>
+                <a href="{{ url_for('deletar_postagem', id=postagem.id) }}">Excluir</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>
