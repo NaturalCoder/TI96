@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Consulta de Saldo</h2>
+    
+    <div class="info-usuario">
+        <p><strong>CPF:</strong> {{ usuario.id }}</p>
+        <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+        <p><strong>Saldo Atual:</strong> R$ {{ "%.2f"|format(usuario.saldo) }}</p>
+        <p><strong>Gasto Diário:</strong> R$ {{ "%.2f"|format(usuario.gasto_diario) }}</p>
+    </div>
+
+    <div class="botoes-acoes">
+        <a href="{{ url_for('historico_transacoes', usuario_id=usuario.id) }}" 
+           class="botao">
+            Ver Histórico
+        </a>
+    </div>
+</div>
+{% endblock %}
