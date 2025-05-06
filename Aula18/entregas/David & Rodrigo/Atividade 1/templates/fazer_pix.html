@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Realizar Transferência PIX</h2>
+
+    <form method="POST" novalidate>
+      
+        <div class="form-group">
+            <label for="destinatario">CPF do Destinatário:</label>
+            <input type="text" id="destinatario" name="destinatario" 
+                   placeholder="CPF do usuário que recebe" required
+                   pattern="\d{11}" 
+                   title="O CPF do destinatário deve ter 11 dígitos numéricos." 
+                   aria-required="true" 
+                   aria-describedby="destinatario-help">
+            <small id="destinatario-help" class="form-text text-muted">
+                Informe o CPF do destinatário com 11 dígitos numéricos (sem pontos ou traços).
+            </small>
+        </div>
+
+    
+        <div class="form-group">
+            <label for="valor">Valor (R$):</label>
+            <input type="number" id="valor" name="valor" 
+                   step="0.01" min="0.01" required
+                   placeholder="Digite o valor da transferência" 
+                   aria-required="true" 
+                   aria-describedby="valor-help">
+            <small id="valor-help" class="form-text text-muted">
+                O valor da transferência deve ser maior que R$0.01.
+            </small>
+        </div>
+
+    
+        {% if 'erro' in session %}
+        <div class="mensagem erro">
+            {{ session['erro'] }}
+        </div>
+        {% endif %}
+
+      
+        <button type="submit">Realizar Transferência</button>
+    </form>
+</div>
+{% endblock %}
