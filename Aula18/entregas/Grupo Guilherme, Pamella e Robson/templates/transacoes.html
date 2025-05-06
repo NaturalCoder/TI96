@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Histórico de Transações</h2>
+    
+    <p>Usuário: {{ usuario.nome }} ({{ usuario.id }})</p>
+
+    <table class="tabela">
+        <thead>
+            <tr>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>Valor (R$)</th>
+                <th>Contraparte</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transacao in transacoes %}
+            <tr>
+                <td>{{ transacao.data_hora.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>
+                    {% if transacao.remetente == usuario.id %}
+                        Enviado
+                    {% else %}
+                        Recebido
+                    {% endif %}
+                </td>
+                <td>{{ "%.2f"|format(transacao.valor) }}</td>
+                <td>
+                    {% if transacao.remetente == usuario.id %}
+                        Para: {{ transacao.destinatario }}
+                    {% else %}
+                        De: {{ transacao.remetente }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Nenhuma transação encontrada</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

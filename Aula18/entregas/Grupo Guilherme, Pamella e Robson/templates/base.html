@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema PIX</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <ul>
+                <li><a href="{{ url_for('pagina_inicial') }}">Início</a></li>
+                {% if 'usuario_id' in session %}
+                    <li><a href="{{ url_for('fazer_pix') }}">Fazer PIX</a></li>
+                    <li><a href="{{ url_for('consultar_saldo') }}">Saldo</a></li>
+                    <li><a href="{{ url_for('depositar') }}">Depositar</a></li>
+                    <li><a href="{{ url_for('sair') }}">Sair</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('entrar_usuario') }}">Entrar</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% if mensagens %}
+                {% for categoria, mensagem in mensagens %}
+                    <div class="mensagem {{ categoria }}">
+                        {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% if request.endpoint == 'depositar' %}
+        <h1>Realizar Depósito</h1>
+        <form method="POST" action="">
+            <div class="form-group">
+                <label for="valor">Valor do Depósito (R$):</label>
+                <input type="number" step="0.01" class="form-control" id="valor" name="valor" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Depositar</button>
+            <a href="{{ url_for('pagina_inicial') }}" class="btn btn-secondary">Voltar</a>
+        </form>
+        {% endif %}
+        {% endblock %}
+    </div>
+</body>
+</html>
