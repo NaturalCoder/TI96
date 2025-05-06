@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Realizar Depósito</h2>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="valor">Valor (R$):</label>
+            <input type="number" id="valor" name="valor" 
+                   step="0.01" min="0.01" required 
+                   placeholder="Digite o valor do depósito">
+        </div>
+
+        <button type="submit">Realizar Depósito</button>
+        <a href="{{ url_for('pagina_inicial') }}" class="btn btn-secondary">Voltar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h1>Bem-vindo ao Sistema PIX</h1>
+    <p>Selecione uma opção:</p>
+    
+    <div class="botoes-menu" class="botao">
+        <a href="{{ url_for('fazer_pix') }}" class="botao">Fazer PIX</a>
+    
+    </div>
+</div>
+{% endblock %}

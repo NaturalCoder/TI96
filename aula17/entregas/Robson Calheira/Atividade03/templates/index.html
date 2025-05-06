@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Mural</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h1 class="text-primary">Mural de Postagens</h1>
+        <a class="btn btn-success my-3" href="{{ url_for('adicionar_postagem') }}">Nova Postagem</a>
+        {% for post in postagens %}
+            <div class="card mb-3">
+                <div class="card-header bg-dark text-white">
+                    <h5>{{ post.titulo }} <small class="text-warning">por {{ post.autor }}</small></h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ post.conteudo }}</p>
+                    <p class="text-end text-muted">
+                        Postado em {{ post.criado_em.strftime('%d/%m/%Y - %H:%M') }}
+                    </p>
+                    <a href="{{ url_for('editar_postagem', id=post.id) }}" class="btn btn-primary btn-sm">Editar</a>
+                    <a href="{{ url_for('deletar_postagem', id=post.id) }}" class="btn btn-danger btn-sm">Deletar</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
