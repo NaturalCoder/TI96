@@ -1,7 +1,15 @@
+"""
+Ativ 01 - Dada a aplicação Envio PIX
+    Corrija todos os BUGs
+    Modifique a aplicação para aceitar chave aleatória
+    Lance a exceção personalizada quando necessário
+    Valide o CPF
+    Melhore o visual e utilidade da aplicação
+
+"""
 import os
-import uuid
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 
@@ -13,99 +21,109 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'da
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Constantes
-LIMITE_POR_TRANSACAO = 5000.00
+# Constantes do sistema
+LIMITE_POR_TRANSACAO = 5000.00  # R$5.000,00
 
-# Exceção personalizada
-class PixException(Exception):
-    pass
-
-# Função para validar CPF
-def validar_cpf(cpf: str) -> bool:
-    cpf = ''.join(filter(str.isdigit, cpf))
-    if len(cpf) != 11 or cpf == cpf[0] * 11:
-        return False
-    soma1 = sum(int(cpf[i]) * (10 - i) for i in range(9))
-    d1 = (soma1 * 10 % 11) % 10
-    soma2 = sum(int(cpf[i]) * (11 - i) for i in range(10))
-    d2 = (soma2 * 10 % 11) % 10
-    return cpf[-2:] == f"{d1}{d2}"
-
-# Gerador de chave aleatória
-def gerar_chave_aleatoria():
-    return str(uuid.uuid4())[:11]
-
-# Modelos
+# Modelagem do banco de dados
 class Usuario(db.Model):
-    id = db.Column(db.String(36), primary_key=True)
+    """
+    Representa um usuário do sistema PIX
+    Campos:
+    - id: CPF ou identificador único (string)
+    - nome: Nome completo do usuário
+    - saldo: Saldo atual da conta
+    - gasto_diario: Total movimentado no dia
+    - ultima_transacao: Data da última transação
+    """
+    id = db.Column(db.String(11), primary_key=True)
     nome = db.Column(db.String(100), nullable=False)
     saldo = db.Column(db.Float, default=0.0)
     gasto_diario = db.Column(db.Float, default=0.0)
     ultima_transacao = db.Column(db.Date)
 
+    def __repr__(self):
+        return f'<Usuário {self.nome}>'
+
 class Transacao(db.Model):
+    """
+    Registro de transações PIX
+    Campos:
+    - id: Número único da transação
+    - remetente: ID do usuário que enviou
+    - destinatario: ID do usuário que recebeu
+    - valor: Quantia transferida
+    - data_hora: Timestamp da transação
+    """
     id = db.Column(db.Integer, primary_key=True)
-    remetente = db.Column(db.String(36), db.ForeignKey('usuario.id'), nullable=False)
-    destinatario = db.Column(db.String(36), db.ForeignKey('usuario.id'), nullable=False)
+    remetente = db.Column(db.String(11), db.ForeignKey('usuario.id'), nullable=False)
+    destinatario = db.Column(db.String(11), db.ForeignKey('usuario.id'), nullable=False)
     valor = db.Column(db.Float, nullable=False)
     data_hora = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relacionamentos
     remetente_rel = db.relationship('Usuario', foreign_keys=[remetente])
     destinatario_rel = db.relationship('Usuario', foreign_keys=[destinatario])
 
+# Cria as tabelas no banco de dados
 with app.app_context():
     db.create_all()
 
+# Rotas da aplicação
 @app.route('/')
 def pagina_inicial():
+    """Página inicial com menu de opções"""
     return render_template('index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def entrar_usuario():
+    """Autentica ou cria um usuário e inicia a sessão"""
     if request.method == 'POST':
-        cpf = ''.join(filter(str.isdigit, request.form.get('cpf')))
-        if not validar_cpf(cpf):
-            flash('CPF inválido!', 'erro')
-            return render_template('entrar_usuario.html')
-
+        cpf = request.form.get('cpf')
+        
         try:
+            # Remove caracteres não numéricos
+            cpf = ''.join(filter(str.isdigit, cpf))
+            
+            # Verifica se o usuário já existe
             usuario = Usuario.query.get(cpf)
+            
             if not usuario:
-                usuario = Usuario(id=cpf, nome=f"Usuário {cpf}", saldo=0.0)
+                # Cria novo usuário se não existir
+                usuario = Usuario(
+                    id=cpf,
+                    nome=f"Usuário {cpf}",
+                    saldo=0.0
+                )
                 db.session.add(usuario)
                 db.session.commit()
                 flash('Novo usuário criado automaticamente!', 'info')
-
+            
+            # Inicia sessão
             session['usuario_id'] = usuario.id
             session['usuario_nome'] = usuario.nome
             flash(f'Bem-vindo(a), {usuario.nome}!', 'sucesso')
             return redirect(url_for('pagina_inicial'))
-
+            
         except Exception as e:
             db.session.rollback()
             flash(f'Erro no acesso: {str(e)}', 'erro')
-
+    
     return render_template('entrar_usuario.html')
 
 @app.route('/logout')
 def sair():
+    """Encerra a sessão do usuário"""
     session.clear()
     flash('Você saiu do sistema', 'info')
     return redirect(url_for('pagina_inicial'))
 
 @app.route('/usuarios/novo', methods=['GET', 'POST'])
 def registrar_usuario():
+    """Cadastra novo usuário no sistema"""
     if request.method == 'POST':
         try:
-            if request.form.get('usar_chave_aleatoria'):
-                cpf = gerar_chave_aleatoria()
-            else:
-                cpf = ''.join(filter(str.isdigit, request.form['cpf']))
-                if not validar_cpf(cpf):
-                    flash('CPF inválido!', 'erro')
-                    return render_template('registrar_usuario.html')
-
             novo_usuario = Usuario(
-                id=cpf,
+                id=request.form['cpf'],
                 nome=request.form['nome'],
                 saldo=float(request.form.get('saldo_inicial', 0))
             )
@@ -115,42 +133,53 @@ def registrar_usuario():
             return redirect(url_for('pagina_inicial'))
         except IntegrityError:
             db.session.rollback()
-            flash('Erro: CPF ou chave já cadastrado!', 'erro')
+            flash('Erro: CPF já cadastrado!', 'erro')
         except Exception as e:
             db.session.rollback()
             flash(f'Erro no cadastro: {str(e)}', 'erro')
-
     return render_template('registrar_usuario.html')
 
 @app.route('/pix', methods=['GET', 'POST'])
 def fazer_pix():
+    """Realiza transferência PIX entre usuários"""
+
     if 'usuario_id' not in session:
         return redirect(url_for('entrar_usuario'))
-
+    
     if request.method == 'POST':
         try:
-            remetente = session['usuario_id']
+            # Coleta dados do formulário
+            remetente = session['usuario_id'] # Usuário logado é o remetente
             destinatario = request.form['destinatario']
             valor = float(request.form['valor'])
-
+            
+            # Validações iniciais
             if valor > LIMITE_POR_TRANSACAO:
-                raise PixException(f"Valor excede o limite por transação de R${LIMITE_POR_TRANSACAO}")
-
+                raise ValueError(f"Valor excede o limite por transação de R${LIMITE_POR_TRANSACAO}")
+                
+            # Busca usuários no banco
             usuario_envio = Usuario.query.get_or_404(remetente)
             usuario_receb = Usuario.query.get_or_404(destinatario)
-
+            
+            # Verifica limite diário
             data_atual = datetime.utcnow().date()
             if usuario_envio.ultima_transacao != data_atual:
                 usuario_envio.gasto_diario = 0.0
-
+                
+            #if (usuario_envio.gasto_diario + valor) > LIMITE_DIARIO:
+            #    raise ValueError(f"Limite diário de R${LIMITE_DIARIO} atingido!")
+            
+            # Verifica saldo
             if usuario_envio.saldo < valor:
-                raise PixException("Saldo insuficiente!")
-
+                raise ValueError("Saldo insuficiente!")
+            
+            # Atualiza saldos
             usuario_envio.saldo -= valor
             usuario_receb.saldo += valor
             usuario_envio.gasto_diario += valor
             usuario_envio.ultima_transacao = data_atual
-
+            
+            # Registra transação
             nova_transacao = Transacao(
                 remetente=remetente,
                 destinatario=destinatario,
@@ -158,31 +187,32 @@ def fazer_pix():
             )
             db.session.add(nova_transacao)
             db.session.commit()
-
+            
             flash('PIX realizado com sucesso!', 'sucesso')
-            return redirect(url_for('consultar_saldo'))
-
-        except PixException as e:
-            flash(str(e), 'erro')
+            return redirect(url_for('consultar_saldo', usuario_id=remetente))
+            
         except Exception as e:
             db.session.rollback()
             flash(f'Erro na transação: {str(e)}', 'erro')
-
+    
     return render_template('fazer_pix.html')
 
 @app.route('/saldo')
 def consultar_saldo():
+    """Exibe saldo e limites do usuário"""
     if 'usuario_id' not in session:
         return redirect(url_for('entrar_usuario'))
+    
     usuario = Usuario.query.get_or_404(session['usuario_id'])
     return render_template('saldo.html', usuario=usuario)
 
 @app.route('/transacoes')
-def historico_transacoes():
+def historico_transacoes(usuario_id):
+    """Mostra histórico completo de transações"""
     if 'usuario_id' not in session:
         return redirect(url_for('entrar_usuario'))
-    usuario_id = session['usuario_id']
-    usuario = Usuario.query.get_or_404(usuario_id)
+    
+    usuario = Usuario.query.get_or_404(session['usuario_id'])
     transacoes = Transacao.query.filter(
         (Transacao.remetente == usuario_id) | 
         (Transacao.destinatario == usuario_id)
