@@ -12,6 +12,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from datetime import datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
+from funcoes import validar_cpf
 
 # Configuração inicial do Flask
 app = Flask(__name__)  # Cria uma instância da aplicação Flask
@@ -23,37 +24,6 @@ db = SQLAlchemy(app)  # Cria uma instância do banco de dados com SQLAlchemy
 
 # Constantes do sistema
 LIMITE_POR_TRANSACAO = 5000.00  # Limite para transações PIX: R$5.000,00
-
-# Função para validar CPF
-def validar_cpf(cpf):
-    """Valida se o CPF é válido usando o algoritmo de verificação de dígitos."""
-    cpf = ''.join(filter(str.isdigit, cpf))  # Remove caracteres não numéricos
-    if len(cpf) != 11:  # Verifica se o CPF tem 11 dígitos
-        return False
-    if cpf == cpf[0] * 11:  # Verifica se todos os dígitos são iguais (exemplo: 111.111.111-11)
-        return False
-    
-    # Cálculo do primeiro dígito verificador
-    soma = 0
-    for i in range(9):
-        soma += int(cpf[i]) * (10 - i)
-    digito1 = (soma * 10) % 11
-    if digito1 == 10:
-        digito1 = 0
-    if digito1 != int(cpf[9]):  # Verifica o primeiro dígito verificador
-        return False
-    
-    # Cálculo do segundo dígito verificador
-    soma = 0
-    for i in range(10):
-        soma += int(cpf[i]) * (11 - i)
-    digito2 = (soma * 10) % 11
-    if digito2 == 10:
-        digito2 = 0
-    if digito2 != int(cpf[10]):  # Verifica o segundo dígito verificador
-        return False
-    
-    return True
 
 # Modelagem do banco de dados
 class Usuario(db.Model):
@@ -195,47 +165,53 @@ def fazer_pix():
     """Realiza transferência PIX entre usuários"""
     if 'usuario_id' not in session:
         return redirect(url_for('entrar_usuario'))
-    
+
     if request.method == 'POST':
         try:
-            remetente = session['usuario_id']  # O remetente é o usuário logado
-            destinatario = request.form['destinatario']
+            remetente = session['usuario_id']
+            chave_destinatario = request.form['destinatario'].strip()
             valor = float(request.form['valor'])
-            
-            if not validar_cpf(destinatario):  # Valida o CPF do destinatário
-                raise ValueError("CPF do destinatário inválido!")
-            
+
             if valor > LIMITE_POR_TRANSACAO:
                 raise ValueError(f"Valor excede o limite por transação de R${LIMITE_POR_TRANSACAO}")
-                
-            usuario_envio = Usuario.query.get_or_404(remetente)  # Busca o remetente
-            usuario_receb = Usuario.query.get_or_404(destinatario)  # Busca o destinatário
-            
-            # Verifica saldo
+
+            # Verifica se é um CPF válido
+            if validar_cpf(chave_destinatario):
+                usuario_receb = Usuario.query.filter_by(cpf=chave_destinatario).first()
+            else:
+                # Busca por chave aleatória
+                usuario_receb = Usuario.query.filter_by(chave_pix=chave_destinatario).first()
+
+            if not usuario_receb:
+                raise ValueError("Destinatário não encontrado!")
+
+            usuario_envio = Usuario.query.get_or_404(remetente)
+
             if usuario_envio.saldo < valor:
                 raise ValueError("Saldo insuficiente!")
-            
-            usuario_envio.saldo -= valor  # Deduz o valor do saldo do remetente
-            usuario_receb.saldo += valor  # Adiciona o valor ao saldo do destinatário
-            usuario_envio.gasto_diario += valor  # Atualiza o gasto diário do remetente
-            usuario_envio.ultima_transacao = datetime.utcnow().date()  # Atualiza a data da última transação
-            
-            # Registra a transação
+
+            # Atualiza os saldos
+            usuario_envio.saldo -= valor
+            usuario_receb.saldo += valor
+            usuario_envio.gasto_diario += valor
+            usuario_envio.ultima_transacao = datetime.utcnow().date()
+
+            # Registra transação
             nova_transacao = Transacao(
                 remetente=remetente,
-                destinatario=destinatario,
+                destinatario=usuario_receb.id,
                 valor=valor
             )
             db.session.add(nova_transacao)
             db.session.commit()
-            
+
             flash('PIX realizado com sucesso!', 'sucesso')
             return redirect(url_for('consultar_saldo', usuario_id=remetente))
-            
+
         except Exception as e:
             db.session.rollback()
             flash(f'Erro na transação: {str(e)}', 'erro')
-    
+
     return render_template('fazer_pix.html')
 
 @app.route('/saldo')

@@ -1,45 +1,33 @@
+# Função para validar CPF
 def validar_cpf(cpf):
-    """
-    Valida um CPF verificando seu formato e dígitos verificadores.
-    
-    Args:
-        cpf: String contendo o CPF (com ou sem pontuação)
-    
-    Returns:
-        bool: True se o CPF é válido, False caso contrário
-    """
-    
-    # Remove caracteres não numéricos
-    cpf = ''.join(filter(str.isdigit, cpf))
-    
-    # Verifica se tem 11 dígitos ou se é uma sequência de dígitos iguais
-    if len(cpf) != 11 or cpf == cpf[0] * 11:
+    """Valida se o CPF é válido usando o algoritmo de verificação de dígitos."""
+    cpf = ''.join(filter(str.isdigit, cpf))  # Remove caracteres não numéricos
+    if len(cpf) != 11:  # Verifica se o CPF tem 11 dígitos
+        return False
+    if cpf == cpf[0] * 11:  # Verifica se todos os dígitos são iguais (exemplo: 111.111.111-11)
         return False
     
-    # Calcula o primeiro dígito verificador
+    # Cálculo do primeiro dígito verificador
     soma = 0
     for i in range(9):
         soma += int(cpf[i]) * (10 - i)
-    resto = soma % 11
-    digito1 = 0 if resto < 2 else 11 - resto
-    
-    # Verifica o primeiro dígito
-    if digito1 != int(cpf[9]):
+    digito1 = (soma * 10) % 11
+    if digito1 == 10:
+        digito1 = 0
+    if digito1 != int(cpf[9]):  # Verifica o primeiro dígito verificador
         return False
     
-    # Calcula o segundo dígito verificador
+    # Cálculo do segundo dígito verificador
     soma = 0
     for i in range(10):
         soma += int(cpf[i]) * (11 - i)
-    resto = soma % 11
-    digito2 = 0 if resto < 2 else 11 - resto
-    
-    # Verifica o segundo dígito
-    if digito2 != int(cpf[10]):
+    digito2 = (soma * 10) % 11
+    if digito2 == 10:
+        digito2 = 0
+    if digito2 != int(cpf[10]):  # Verifica o segundo dígito verificador
         return False
     
     return True
-
 
 
 from algosdk import account
