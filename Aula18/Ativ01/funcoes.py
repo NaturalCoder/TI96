@@ -1,5 +1,5 @@
 # rodar pip install py-algorand-sdk
-from algosdk import account, encoding, client, transaction
+from algosdk import account, encoding, v2client, transaction
 
 def validar_cpf(cpf):
     """
@@ -90,7 +90,7 @@ def enviar_algos(algos:int, destino:str, private_key:str):
     """
 
     # Parâmetros da rede
-    params = client.suggested_params()
+    params = v2client.algod.AlgodClient().suggested_params()
 
     # Transação de transferência de ALGOs
     txn = transaction.PaymentTxn(
@@ -103,10 +103,33 @@ def enviar_algos(algos:int, destino:str, private_key:str):
 
     # Assinar e enviar
     signed_txn = txn.sign(private_key)
-    tx_id = client.send_transaction(signed_txn)
+    tx_id = v2client.send_transaction(signed_txn)
     print("ID da transação:", tx_id)
 
+
+while True:
+    o = input("**** MENU ***** \r\n0 - Gerar chave\r\n1 - Enviar ALGOs\r\n3 - Sair\r\nEscolha: ")
+    if o == "0":
+        chave = gerar_chaves()
+        print(chave[0])  #chave privada
+        print(chave[1])  #chave publica
+        break
+    elif o == "1":
+        algos = int(input("Quantos ALGOs deseja enviar? (em microALGOs) "))
+        destino = input("Entre com o endereço de destino: ")
+        private_key = input("Entre com a chave privada: ")
+        
+        if endereco_eh_valido(destino):
+            enviar_algos(algos, destino, private_key)
+        else:
+            print("Endereço inválido.")
+        break
+    elif o == "3":
+        print("Saindo...")
+        break
+    
 #cha = gerar_chaves()
 #print(cha[0])  #chave privada
 #print(cha[1])  #chave publica
 
+#pk = input("Entre com a PK")
